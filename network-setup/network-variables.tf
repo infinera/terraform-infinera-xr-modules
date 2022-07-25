@@ -1,0 +1,49 @@
+// network variables
+variable "modulation" {
+  type    = string
+  default = "16QAM"
+  description = "network modulation to be used for all the devices"
+}
+
+variable "clientportmode" {
+  type    = string
+  default = "ethernet"
+  description = "client traffic used for all the ports on the hub and leafs"
+}
+
+// Required for both Hub and Leaf but different values
+variable "maxdigitalsubcarriers" {
+  type    = number
+  default = 16
+  description = "maximum number of digital sub carriers"
+}
+
+
+
+
+// If frequencyCtrl = Host, Host is the config owner
+// if frequencyCtrl = XR, CM is the config owner
+# variable "constellationfrequency" {
+#   type    = number
+#   default = 0
+# }
+
+# // module URI       :(/ports/{portid}/carriers/{carrierid})
+# // fixed for 1 port and 1 carrier system to 1
+# variable "portid" {
+#   type    = string
+#   default = "1"
+# }
+
+/* Not required, use the leaf names and fixed port 1, carrier 1
+
+variable "leaf_carrier_aids" {
+  type = list(string)
+  default = [
+    "M1/P1-C1",
+    "M1/P2-C1",
+    "M2/P1-C1"
+  ]
+}
+
+*/
