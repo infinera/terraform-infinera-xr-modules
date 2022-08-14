@@ -13,6 +13,5 @@ variable "leaf_names" {
   description = "Add/Remove - leaf_names - upto 16 entires"
 }
 
-variable "trafficmode" {
-  type    = string
-}
+
+

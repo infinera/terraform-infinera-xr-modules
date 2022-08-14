@@ -12,7 +12,3 @@ variable "leaf_names" {
   type = list(string)
   description = "Add/Remove - leaf_names - upto 16 entires"
 }
-
-variable "trafficmode" {
-  type    = string
-}

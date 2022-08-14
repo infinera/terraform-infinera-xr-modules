@@ -14,9 +14,9 @@ resource "xrcm_dsc" "dsc" {
   carrierid = var.carrierid
   dscid     = each.key
   //usability         = var.usability // 
-  // constellationdscid = (contains(var.tx_bandwithlist, each.value)) ? each.key : ""
-  txenabled = (contains(var.tx_bandwithlist, each.value)) ? true : false
-  rxenabled = (contains(var.rx_bandwithlist, each.value)) ? true : false
+  constellationdscid = var.constellationdscidlist[each.key - 1]
+  txenabled          = (contains(var.tx_bandwithlist, var.constellationdscidlist[each.key - 1])) ? true : false
+  rxenabled          = (contains(var.rx_bandwithlist, var.constellationdscidlist[each.key - 1])) ? true : false
 
   //facprbsgenenabled = var.facprbsgenenabled
   //facprbsmonenabled = var.facprbsmonenabled

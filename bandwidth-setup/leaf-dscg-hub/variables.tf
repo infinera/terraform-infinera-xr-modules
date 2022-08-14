@@ -27,8 +27,14 @@ variable "leafbandwidth" {
   }))
 }
 
-variable "trafficmode" {
-  type = string
+variable "hubbandwidth" {
+  type = map(object({
+    hubdscgid     = string
+    leafdscgid    = string
+    hubdscidlist  = list(string)
+    leafdscidlist = list(string)
+    direction     = string
+  }))
 }
 
 /*

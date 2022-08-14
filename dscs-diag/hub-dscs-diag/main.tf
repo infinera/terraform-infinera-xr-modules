@@ -9,11 +9,11 @@ terraform {
 
 resource "xrcm_dsc_diag" "hub_dsc_diag" {
 
- for_each = toset(var.dscids)
-    n = var.n
-    portid = var.portid
-    carrierid = var.carrierid
-    dscid = each.value
-    facprbsgenenabled = var.facprbsgenenabled
-    facprbsmonenabled = var.facprbsmonenabled
+  for_each          = toset(var.dscids)
+  n                 = var.n
+  lineptpid         = var.lineptpid
+  carrierid         = var.carrierid
+  dscid             = each.value
+  facprbsgenenabled = var.facprbsgenenabled
+  facprbsmonenabled = var.facprbsmonenabled
 }

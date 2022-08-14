@@ -8,6 +8,14 @@ variable "leafdsccount" {
   default = 4
 }
 
+/*
+variable "dsc_setting" {
+  type = map(map(object({
+    tx = bool
+    rx = bool
+    constellationdscid = string
+  
+  */
 variable "hubdscids" {
   type        = list(string)
   description = "Hub DSC IDs"

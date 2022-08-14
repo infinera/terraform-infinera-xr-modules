@@ -1,13 +1,13 @@
 // module resource  : xr.dscg
-// module URI       :(/ports/{portid}/carriers/{carrierid}/dscgs)
-// fixed for 1 port and 1 carrier system to 1
+// module URI       :(/ports/{lineptpid}/carriers/{carrierid}/dscgs)
+// fixed for 1 lineptp and 1 carrier system to 1
 
 variable "n" {
   type    = string
   default = "1"
 }
 
-variable "portid" {
+variable "lineptpid" {
   type    = string
   default = "1"
 }
@@ -19,9 +19,29 @@ variable "carrierid" {
 
 variable "leafbandwidth" {
   type = map(object({
+    hubdscgid     = string
+    leafdscgid    = string
+    hubdscidlist  = list(string)
+    leafdscidlist = list(string)
+    direction     = string
+  }))
+}
+
+
+
+/*
+variable "leafbandwidth" {
+  type = map(object({
     hubdscgid    = string
     leafdscgid   = string
-    hubdscidlist = list(string)
-    leafdscidlist = list(string)
+    hubdscidlistds = list(string)
+    leafdscidlistds = list(string)
+    hubdscidlistus = list(string)
+    leafdscidlistus = list(string)
   }))
+}
+*/
+
+variable "trafficmode" {
+  type = string
 }

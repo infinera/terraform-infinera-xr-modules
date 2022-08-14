@@ -1,9 +1,15 @@
 // module resource  : xr.carrier
 // module URI       :(/ports/
 
-// module URI       :(/ports/{portid}/carriers/{carrierid})
-// fixed for 1 port and 1 carrier system to 1
-variable "portid" {
+// module URI       :(/ports/{lineptpid}/carriers/{carrierid})
+// fixed for 1 lineptp and 1 carrier system to 1
+
+variable "n" {
+  type    = string
+  default = "1"
+}
+
+variable "lineptpid" {
   type    = string
   default = "1"
 }
@@ -11,27 +17,6 @@ variable "portid" {
 variable "carrierid" {
   type    = string
   default = "1"
-}
-
-variable "n" {
-  type    = string
-}
-
-/*
-variable "dscid" {
-  type = string
-}
-*/
-
-variable "leafbandwidth" {
-  type = map(object({
-    hubdscgid    = string
-    leafdscgid   = string
-    hubdscidlist = list(string)
-  }))
-}
-variable "leafdscids" {
-  type = list(string)
 }
 
 
@@ -50,6 +35,42 @@ variable "rxenabled" {
   default = false
 }
 
+
+variable "dscidlist" {
+  type = list(string)
+}
+
+variable "tx_bandwithlist" {
+  type = list(string)
+}
+
+
+variable "rx_bandwithlist" {
+  type = list(string)
+}
+
+variable "leafdscidlist" {
+  type = list(string)
+}
+
+variable "constellationdscidlist" {
+  type = list(string)
+}
+/*
+variable "all_leafs" {
+  type = list(map(object({
+    hubdscgid     = string
+    leafdscgid    = string
+    hubdscidlist  = list(string)
+    leafdscidlist = list(string) 
+    direction     = string // possible values: bidi, us, ds
+  })))
+}
+*/
+
+
+
+
 /* variable "facprbsmonenabled" {
   type    = bool
   default = false
@@ -60,7 +81,10 @@ variable "facprbsgenenabled" {
   default = false
 }
 
-*/
+variable "n" {
+  type    = string
+  default = "XR-SFO-Hub"
+}*/
 
 # variable "poweroffset" {
 #   type    = number

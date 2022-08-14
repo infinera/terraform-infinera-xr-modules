@@ -13,6 +13,4 @@ resource "xrcm_cfg" "leaf" {
   configuredrole = var.leaf_configuredrole
   trafficmode = var.trafficmode
   fiberconnectionmode = var.fiberconnectionmode
- //  tcmode = true
-  //n =  var.leaf_names[count.index]
 }

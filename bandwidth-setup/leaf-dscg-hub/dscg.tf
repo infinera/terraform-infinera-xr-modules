@@ -12,9 +12,9 @@ resource "xrcm_dscg" "dscg" {
   n         = var.n
   lineptpid = var.lineptpid
   carrierid = var.carrierid
-  dscgid    = each.value["leafdscgid"]
-  usdscids  = var.trafficmode == "L1Mode" ? each.value["leafdscidlist"] : each.value["direction"] == "us" ? each.value["leafdscidlist"] : []
-  dsdscids  = var.trafficmode == "L1Mode" ? each.value["leafdscidlist"] : each.value["direction"] == "ds" ? each.value["leafdscidlist"] : []
+  dscgid    = var.hubbandwidth[each.key].leafdscgid
+  usdscids  = [] // each.value["leafdscidlist"]
+  dsdscids  = var.hubbandwidth[each.key].leafdscidlist
   //add multiple condition to cover bidi - need to verify if following is correct
   // usdscids = each.value[direction] == "us" ? each.value[direction] == "bidi" ? each.value["leafdscidlist"] : ""
 }

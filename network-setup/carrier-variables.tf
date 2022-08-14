@@ -5,9 +5,9 @@ variable "constellationfrequency" {
   default = 455500
 }
 
-// module URI       :(/ports/{portid}/carriers/{carrierid})
-// fixed for 1 port and 1 carrier system to 1
-variable "portid" {
+// module URI       :(/ports/{lineptpid}/carriers/{carrierid})
+// fixed for 1 lineptp and 1 carrier system to 1
+variable "lineptpid" {
   type    = string
   default = "1"
 }

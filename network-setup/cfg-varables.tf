@@ -10,11 +10,6 @@ variable "leaf_configuredrole" {
   default = "leaf"
 }
 
-variable "trafficmode" {
-  type    = string
-  default = "L1Mode"
-}
-
 variable "tcMode" {
   type    = string
   default = "Enabled"

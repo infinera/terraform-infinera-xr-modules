@@ -1,100 +1,45 @@
-
 /*
-module "hub-port" {
-  source = "./port"
-
-  operstatus = "disabled"
-
-  providers = {
-    xrcm = xrcm.xrcm
-  }
-}
+for each hub, just one hub supported
+  for each hub dsc
+    enable txenabled if hub as a BW entry for this DSC
+    enable rxenabled if leaf has a BW entry for this DSC
 */
-
-
-
 
 module "hub-dsc" {
   source = "./hub-dsc"
-  
-  
-  
 
-  for_each = toset(var.hub_names)
- // for_each  = toset(var.hubdscids)
-    dscids    = var.hubdscids
-    // dscid     = each.value
-    n         = each.value
-    portid    = 1
-    carrierid = 1
-    txenabled = true
-    rxenabled = true
-
-
+  for_each        = toset(var.hub_names)
+  dscidlist       = var.hubdscids
+  tx_bandwithlist = flatten([for k in var.hub_bandwidth[each.key] : k["hubdscidlist"]])
+  rx_bandwithlist = flatten([for k in values(var.leaf_bandwidth) : [for ki in k : ki["hubdscidlist"]]])
+  n               = each.value
+  lineptpid       = 1
+  carrierid       = 1
 }
-
-
+/*
+for each leaf 
+  for each leaf dsc
+    enable dsc.txenabled - if leaf has leaf BW else false
+    enable dsc.rxenabled- if hub has matching hub BW for this leaf BW else false
+    set dsc.constellationid to matching hub DSC ids 
+    
+*/
 
 module "leaf-dsc" {
   source = "./leaf-dsc"
 
-  
-  for_each = toset( var.leaf_names)
-    n     = each.value
-  
-    portid              = 1
-    carrierid           = 1
-    txenabled           = true
-    rxenabled           = true
-    leafdscids          = var.leafdscids
-    leafbandwidth = var.leaf-2-hub-dscids[each.key]
 
+  for_each               = toset(var.leaf_names)
+  dscidlist              = var.leafdscids
+  rx_bandwithlist        = flatten([for k, v in var.leaf_bandwidth[each.key] : { for ki, vi in var.hub_bandwidth[var.hub_names[0]][k] : ki => vi if ki == "hubdscidlist" }][*].hubdscidlist)
+  tx_bandwithlist        = flatten([for k in var.leaf_bandwidth[each.key] : k["hubdscidlist"]])
+  leafdscidlist          = flatten([for k in var.leaf_bandwidth[each.key] : k["leafdscidlist"]])
+  constellationdscidlist = flatten([for k, v in var.leaf_bandwidth[each.key] : { for ki, vi in var.hub_bandwidth[var.hub_names[0]][k] : ki => vi if ki == "hubdscidlist" }][*].hubdscidlist)
+  n                      = each.value
+  lineptpid              = 1
+  carrierid              = 1
 }
 
-/*
-
-
-module "leafs-port" {
-  source = "./port"
-
-  depends_on = [module.hub-cfg[0]]
-
-  count      = length(var.leaf_names)
-  n          = var.leaf_names[count.index]
-  operstatus = "disabled"
-  providers = {
-    xrcm = xrcm.xrcm
-  }
-}
-
-module "huf-port-dscg" {
-  source = "./dscg"
-
-  depends_on = [module.hub-cfg[0]]
-
-  n      = "XR-SFO-1"
-  usdscs = ["aa", "bb"]
-  dsdscs = ["cc", "dd"]
-  providers = {
-    xrcm = xrcm.xrcm
-  }
-}
-
-module "leafs-port-dscg" {
-  source = "./dscg"
-
-  depends_on = [module.hub-cfg[0]]
-
-  count  = length(var.leaf_names)
-  n      = var.leaf_names[count.index]
-  usdscs = ["e", "f"]
-  dsdscs = ["g", "h"]
-
-  providers = {
-    xrcm = xrcm.xrcm
-  }
-}
-*/
 
 /* hub1 - dsc1 ID = 1
    hub1 - dsc2 ID = 2 
