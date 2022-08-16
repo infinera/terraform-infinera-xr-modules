@@ -15,14 +15,17 @@ terraform {
   // required_version = "~> 1.1.3"
 }
 
+//Hub tx == ds; rx == us
+//leaf tx == us; rx == ds
+
 resource "xrcm_dscg" "dscg" {
   for_each  = var.leafbandwidth
   n         = var.n
   lineptpid = var.lineptpid
   carrierid = var.carrierid
   dscgid    = each.value["hubdscgid"]
-  usdscids  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : each.value["direction"] == "us" ? each.value["hubdscidlist"] : []
-  dsdscids  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : each.value["direction"] == "ds" ? each.value["hubdscidlist"] : []
+  rxdscs  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : []
+  txdscs  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : []
   //add multiple condition to cover bidi - need to verify if following is correct
   //usdscids = each.value["direction"] == "us" ? each.value["direction"] == "bidi" ? each.value["leafdscidlist"] : ""
 
