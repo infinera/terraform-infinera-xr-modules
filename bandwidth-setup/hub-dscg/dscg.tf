@@ -24,6 +24,8 @@ resource "xrcm_dscg" "dscg" {
   lineptpid = var.lineptpid
   carrierid = var.carrierid
   dscgid    = each.value["hubdscgid"]
+  //rxdscs  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : []
+  //txdscs  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : []
   rxdscs  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : []
   txdscs  = var.trafficmode == "L1Mode" ? each.value["hubdscidlist"] : []
   //add multiple condition to cover bidi - need to verify if following is correct
