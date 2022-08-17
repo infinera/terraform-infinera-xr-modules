@@ -19,7 +19,7 @@ variable "lclist" {
     clientid      = string
     dscgid        = string
     lctype        = string
-    rate          = number
+    capacity          = number
     imc           = string
     imc_outer_vid = string
     emc           = string
