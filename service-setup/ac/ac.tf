@@ -13,7 +13,7 @@ resource "xrcm_ac" "ac" {
     n        = var.n
     ethernetid = each.value["clientid"]
     acid     = each.key
-    capacity     = each.value["rate"]
+    capacity     = each.value["capacity"]
     imc      = each.value["imc"]
     imc_outer_vid = each.value["imc_outer_vid"]
     emc      = each.value["emc"]
