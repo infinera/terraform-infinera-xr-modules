@@ -1,7 +1,3 @@
-output "hub-dscs-diag" {
-  value =module.hub-dscs-diag
-}
-
-output "leaf-dscs-diag" {
-  value =module.leaf-dscs-diag
+output "device-dscs-diag" {
+  value =module.device-dscs
 }

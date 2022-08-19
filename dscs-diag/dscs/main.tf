@@ -7,13 +7,13 @@ terraform {
   // required_version = "~> 1.1.3"
 }
 
-resource "xrcm_dsc_diag" "hub_dsc_diag" {
+resource "xrcm_dsc_diag" "dsc_diag" {
 
-  for_each          = toset(var.dscids)
+  for_each          = toset(var.dscstest["dscids"])
   n                 = var.n
   lineptpid         = var.lineptpid
   carrierid         = var.carrierid
   dscid             = each.value
-  facprbsgenenabled = var.facprbsgenenabled
-  facprbsmonenabled = var.facprbsmonenabled
+  facprbsgenenabled = var.dscstest["facprbsgen"]
+  facprbsmonenabled = var.dscstest["facprbsmon"]
 }

@@ -1,26 +1,31 @@
 
-variable "hub_names" {
-  type    = list(string)
-  description = "Add hub name, only one entry supported"
+variable "n" {
+  type    = string
+  default = "1"
 }
 
-// TODO : Add New Leaf
-// TODO : remove leaf; Cascaded Delete
-
-variable "leaf-2-hub-dscids" {
- type = map(map(object({
-    hubdscgid     = string
-    leafdscgid    = string
-    hubdscidlist  = list(string)
-    leafdscidlist = list(string)
-  })))
-  description = "Defines the bandwidth to provisioned between Hub and each leaf. For each leaf, define the hub dscids to be assigned to the BW, and the hubdscgid and leafdscgid to be use to create the DSCG. Creates Hub and Leaf DSCGs"
+variable "lineptpid" {
+  type    = string
+  default = "1"
 }
 
-variable "hub-leaf-dscs-diag" {
- type = map(map(object({
-    hubfacprbsgen     = string
-    hubfacprbsmon   = string
-  })))
+variable "carrierid" {
+  type    = string
+  default = "1"
+}
+
+variable "dscstest" {
+  type =list(object({
+    name = string
+    dscids = list(string)
+    facprbsgen = string
+    facprbsmon = string
+  }))
   description = "Defines the dsc test between Hub and each leaf"
+  default = [
+      { name="xr-regA_H1-Hub", dscids= ["1", "2", "3", "4", "5"],  facprbsgen = "true", facprbsmon = "true" },
+      { name="xr-regA_H1-L1", dscids= ["1", "2", "3", "4", "5"], facprbsgen = "true", facprbsmon = "true" },
+      { name="xr-regA_H1-L2", dscids= ["1", "2", "3", "4", "5"], facprbsgen = "true", facprbsmon = "true" },
+      { name="xr-regA_H1-L3", dscids= ["1", "2", "3", "4", "5"], facprbsgen = "true", facprbsmon = "true" },
+    ]
 }
