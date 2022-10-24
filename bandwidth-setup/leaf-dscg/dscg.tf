@@ -13,7 +13,7 @@ terraform {
 resource "xrcm_dscg" "dscg" {
   for_each = var.leafbandwidth
     n         = var.n
-    portid    = var.portid
+    lineptpid = var.lineptpid
     carrierid = var.carrierid
     dscgid     = each.value["leafdscgid"]
     txdscs = var.trafficmode == "L1Mode" ? each.value["leafdscidlist"] : each.value["direction"] == "us" ? each.value["leafdscidlist"] : []
