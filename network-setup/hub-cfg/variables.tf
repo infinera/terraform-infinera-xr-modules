@@ -21,7 +21,7 @@ variable "trafficmode" {
 }
 
 variable "tcmode" {
-  type    = boolean
+  type    = bool
   default = true
 }
 
