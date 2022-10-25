@@ -20,9 +20,9 @@ variable "trafficmode" {
   default = "L1Mode"
 }
 
-variable "tcMode" {
-  type    = string
-  default = "Enabled"
+variable "tcmode" {
+  type    = boolean
+  default = true
 }
 
 

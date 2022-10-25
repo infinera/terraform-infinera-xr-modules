@@ -21,8 +21,8 @@ variable "trafficmode" {
 }
 
 variable "tcMode" {
-  type    = string
-  default = "Enabled"
+  type    = boolean
+  default = true
 }
 
 // Common variables
