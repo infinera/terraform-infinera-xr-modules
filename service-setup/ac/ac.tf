@@ -9,7 +9,7 @@ terraform {
 
 resource "xrcm_ac" "ac" {
 
-  for_each = var.aclist
+  for_each = var.online ? var.aclist : {}
     n        = var.n
     ethernetid = each.value["clientid"]
     acid     = each.key

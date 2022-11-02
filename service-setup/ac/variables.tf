@@ -59,3 +59,7 @@ variable "n" {
 variable "trafficmode" {
   type    = string
 }
+
+variable "online" {
+  type    = bool
+}
