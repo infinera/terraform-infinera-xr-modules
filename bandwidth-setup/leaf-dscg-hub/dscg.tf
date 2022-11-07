@@ -14,9 +14,9 @@ resource "xrcm_dscg" "dscg" {
   n         = var.n
   lineptpid = var.lineptpid
   carrierid = var.carrierid
-  dscgid    = var.hubbandwidth[each.key].leafdscgid
+  dscgid    = var.hubbandwidth != null ? var.hubbandwidth[each.key].leafdscgid : 0
   rxdscs  = [] // each.value["leafdscidlist"]
-  txdscs  = var.hubbandwidth[each.key].leafdscidlist
+  txdscs  = var.hubbandwidth != null ? var.hubbandwidth[each.key].leafdscidlist : []
   //add multiple condition to cover bidi - need to verify if following is correct
   // usdscids = each.value[direction] == "us" ? each.value[direction] == "bidi" ? each.value["leafdscidlist"] : ""
 }

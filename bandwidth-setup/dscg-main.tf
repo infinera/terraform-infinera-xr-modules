@@ -19,7 +19,7 @@ module "hub-dscg-leaf" {
   source = "./hub-dscg"
 
   // In case of L2 Mode, create leaf DSCGs in the Hub, L1 Mode, don't create
-  for_each = var.trafficmode == "L2Mode" ? toset(var.leaf_names) : toset([])
+  for_each = var.trafficmode == "L2Mode" && length(var.hub_names) > 0 ? toset(var.leaf_names) : toset([])
   // Loop all the leafs defined, creating corresponding DSCGs in the hub
   leafbandwidth = var.leaf_bandwidth[each.key]
   n             = var.hub_names[0]
@@ -72,6 +72,6 @@ module "leaf-dscg-hub" {
   n             = each.key
   lineptpid     = 1
   carrierid     = 1
-  hubbandwidth  = var.hub_bandwidth[var.hub_names[0]]
+  hubbandwidth  = length(var.hub_names) > 0 ? var.hub_bandwidth[var.hub_names[0]] : null
 
 }

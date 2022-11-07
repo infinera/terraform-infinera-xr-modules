@@ -31,10 +31,10 @@ module "leaf-dsc" {
 
   for_each               = toset(var.leaf_names)
   dscidlist              = var.leafdscids
-  rx_bandwithlist        = flatten([for k, v in var.leaf_bandwidth[each.key] : { for ki, vi in var.hub_bandwidth[var.hub_names[0]][k] : ki => vi if ki == "hubdscidlist" }][*].hubdscidlist)
+  rx_bandwithlist        = length(var.hub_names) > 0 ? flatten([for k, v in var.leaf_bandwidth[each.key] : { for ki, vi in var.hub_bandwidth[var.hub_names[0]][k] : ki => vi if ki == "hubdscidlist" }][*].hubdscidlist) : []
   tx_bandwithlist        = flatten([for k in var.leaf_bandwidth[each.key] : k["hubdscidlist"]])
   leafdscidlist          = flatten([for k in var.leaf_bandwidth[each.key] : k["leafdscidlist"]])
-  constellationdscidlist = flatten([for k, v in var.leaf_bandwidth[each.key] : { for ki, vi in var.hub_bandwidth[var.hub_names[0]][k] : ki => vi if ki == "hubdscidlist" }][*].hubdscidlist)
+  constellationdscidlist = length(var.hub_names) > 0 ? flatten([for k, v in var.leaf_bandwidth[each.key] : { for ki, vi in var.hub_bandwidth[var.hub_names[0]][k] : ki => vi if ki == "hubdscidlist" }][*].hubdscidlist) : []
   n                      = each.value
   lineptpid              = 1
   carrierid              = 1
