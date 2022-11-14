@@ -4,5 +4,4 @@ terraform {
       source = "infinera.com/poc/xrcm"
     }
   }
-  // required_version = "~> 1.1.3"
 }

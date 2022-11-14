@@ -1,10 +1,10 @@
 
-variable filteredhubnames {
+variable filteredhub_names {
   type = list(string)
   default = []
 }
 
-variable filteredleafnames {
+variable filteredleaf_names {
   type = list(string)
   default = []
 }

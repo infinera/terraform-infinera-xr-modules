@@ -12,8 +12,8 @@ data "xrcm_onlinedevices" "onlineleafdevices" {
 }
 
 locals {
-  hub_names = length(var.filteredhubnames) > 0 ? setsubtract(data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name], var.filteredhubnames) : data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name]
-  leaf_names = length(var.filteredleafnames) > 0 ? setsubtract(data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name], var.filteredleafnames) : data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name]
+  hub_names = length(var.filteredhub_names) > 0 ? setsubtract(data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name], var.filteredhub_names) : data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name]
+  leaf_names = length(var.filteredleaf_names) > 0 ? setsubtract(data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name], var.filteredleaf_names) : data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name]
   module_carriers = { for k,v in var.network.setup: k => v.modulecarriers[0]}
   module_clients =  { for k,v in var.network.setup: k => v.moduleclients }
 }
