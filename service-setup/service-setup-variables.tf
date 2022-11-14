@@ -1,6 +1,6 @@
 variable "client-2-dscg" {
   type = map(map(object({
-    clientid = string
+    clientindex = number
     dscgid   = string
     lctype = string
     capacity = number
@@ -15,4 +15,8 @@ variable "client-2-dscg" {
 variable "acpres" {
   type    = string
   default = "true" // true or false
+}
+
+variable "module_clients" {
+  type    = map(list(string))
 }

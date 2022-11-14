@@ -13,8 +13,10 @@ module "hub-dsc" {
   tx_bandwithlist = flatten([for k in var.hub_bandwidth[each.key] : k["hubdscidlist"]])
   rx_bandwithlist = flatten([for k in values(var.leaf_bandwidth) : [for ki in k : ki["hubdscidlist"]]])
   n               = each.value
-  lineptpid       = 1
-  carrierid       = 1
+  //lineptpid       = 1
+  //carrierid       = 1
+  lineptpid = var.module_carriers[each.key].lineptpid
+  carrierid = var.module_carriers[each.key].carrierid
 }
 /*
 for each leaf 
@@ -36,8 +38,10 @@ module "leaf-dsc" {
   leafdscidlist          = flatten([for k in var.leaf_bandwidth[each.key] : k["leafdscidlist"]])
   constellationdscidlist = length(var.hub_names) > 0 ? flatten([for k, v in var.leaf_bandwidth[each.key] : { for ki, vi in var.hub_bandwidth[var.hub_names[0]][k] : ki => vi if ki == "hubdscidlist" }][*].hubdscidlist) : []
   n                      = each.value
-  lineptpid              = 1
-  carrierid              = 1
+  //lineptpid       = 1
+  //carrierid       = 1
+  lineptpid = var.module_carriers[each.key].lineptpid
+  carrierid = var.module_carriers[each.key].carrierid
 }
 
 

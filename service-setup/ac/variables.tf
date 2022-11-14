@@ -40,7 +40,7 @@ variable "emc_outer_vid" {
 
 variable "aclist" {
   type = map(object({
-    clientid = string
+    clientindex = number
     dscgid   = string
     lctype = string
     capacity = number
@@ -62,4 +62,8 @@ variable "trafficmode" {
 
 variable "online" {
   type    = bool
+}
+
+variable "module_clients" {
+  type    = map(list(string))
 }

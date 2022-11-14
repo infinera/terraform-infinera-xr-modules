@@ -11,7 +11,7 @@ resource "xrcm_ac" "ac" {
 
   for_each = var.online ? var.aclist : {}
     n        = var.n
-    ethernetid = each.value["clientid"]
+    ethernetid = var.module_clients[var.n][each.value["clientindex"]]
     acid     = each.key
     capacity     = each.value["capacity"]
     imc      = each.value["imc"]

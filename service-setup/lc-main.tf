@@ -10,6 +10,8 @@ module "lc-hub" {
    n          = each.key  // each module
    lclist     = var.client-2-dscg[each.key] // for each LC 
    trafficmode = var.trafficmode
+   lineptpid = var.module_carriers[each.key].lineptpid
+   carrierid = var.module_carriers[each.key].carrierid
 
 }
 
@@ -21,5 +23,7 @@ module "lc-leaf" {
    n          = each.key // each module
    lclist     = var.client-2-dscg[each.key] // for each LC 
    trafficmode = var.trafficmode
+   lineptpid = var.module_carriers[each.key].lineptpid
+   carrierid = var.module_carriers[each.key].carrierid
 
 }

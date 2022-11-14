@@ -8,8 +8,10 @@ module "hub-dscg" {
   // Loop all the leafs defined, creating corresponding DSCGs in the hub
   leafbandwidth = var.hub_bandwidth[each.key]
   n             = each.key
-  lineptpid     = 1
-  carrierid     = 1
+  //lineptpid       = 1
+  //carrierid       = 1
+  lineptpid = var.module_carriers[each.key].lineptpid
+  carrierid = var.module_carriers[each.key].carrierid
   trafficmode   = var.trafficmode
 }
 
@@ -23,8 +25,10 @@ module "hub-dscg-leaf" {
   // Loop all the leafs defined, creating corresponding DSCGs in the hub
   leafbandwidth = var.leaf_bandwidth[each.key]
   n             = var.hub_names[0]
-  lineptpid     = 1
-  carrierid     = 1
+  //lineptpid       = 1
+  //carrierid       = 1
+  lineptpid = var.module_carriers[each.key].lineptpid
+  carrierid = var.module_carriers[each.key].carrierid
   trafficmode   = var.trafficmode
 }
 
@@ -46,8 +50,10 @@ module "leaf-dscg" {
 
   leafbandwidth = var.leaf_bandwidth[each.key]
   n             = each.key
-  lineptpid     = 1
-  carrierid     = 1
+  //lineptpid       = 1
+  //carrierid       = 1
+  lineptpid = var.module_carriers[each.key].lineptpid
+  carrierid = var.module_carriers[each.key].carrierid
   trafficmode   = var.trafficmode
 }
 
@@ -70,8 +76,10 @@ module "leaf-dscg-hub" {
 
   leafbandwidth = var.leaf_bandwidth[each.key]
   n             = each.key
-  lineptpid     = 1
-  carrierid     = 1
+  //lineptpid       = 1
+  //carrierid       = 1
+  lineptpid = var.module_carriers[each.key].lineptpid
+  carrierid = var.module_carriers[each.key].carrierid
   hubbandwidth  = length(var.hub_names) > 0 ? var.hub_bandwidth[var.hub_names[0]] : null
 
 }

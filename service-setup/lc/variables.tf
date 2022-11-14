@@ -16,7 +16,7 @@ variable "acpres" {
 
 variable "lclist" {
   type = map(object({
-    clientid      = string
+    clientindex = number
     dscgid        = string
     lctype        = string
     capacity          = number
