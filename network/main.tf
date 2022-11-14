@@ -3,10 +3,6 @@
 // bandwidht
 // service
 
-/*terraform {
-  experiments = [module_variable_optional_attrs]
-}*/
-
 data "xrcm_onlinedevices" "onlinehubdevices" {
   names = [for k,v in var.network.setup: k if v.moduleconfig["configuredrole"] == "hub"]
 }
@@ -16,12 +12,8 @@ data "xrcm_onlinedevices" "onlineleafdevices" {
 }
 
 locals {
-  filteredhubnames = [""]
-  filteredleafnames = [""]
-  //filteredhubnames = ["xr-regA_H1-Hub"]
-  //filteredleafnames = ["xr-regA_H1-L1"]
-  hub_names = length(local.filteredhubnames) > 0 ? setsubtract(data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name], local.filteredhubnames) : data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name]
-  leaf_names = length(local.filteredleafnames) > 0 ? setsubtract(data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name], local.filteredleafnames) : data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name]
+  hub_names = length(var.filteredhubnames) > 0 ? setsubtract(data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name], var.filteredhubnames) : data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name]
+  leaf_names = length(var.filteredleafnames) > 0 ? setsubtract(data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name], var.filteredleafnames) : data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name]
   module_carriers = { for k,v in var.network.setup: k => v.modulecarriers[0]}
   module_clients =  { for k,v in var.network.setup: k => v.moduleclients }
 }

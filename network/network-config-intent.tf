@@ -1,4 +1,13 @@
 
+variable filteredhubnames {
+  type = list(string)
+  default = []
+}
+
+variable filteredleafnames {
+  type = list(string)
+  default = []
+}
 // Map of module names to map of module config, clients and lines
 variable network {
   type = object({

@@ -580,20 +580,3 @@ variable "client-2-dscg" {
     } 
   }
 }
-
-
-/* Hub
-XR-T1 x XR-L1-C1-DSCG1
-XR-T2 x XR-L1-C1-DSCG2
-XR-T3 x XR-L1-C1-DSCG3
-
-Leaf 1
-XR-T1 x XR-L1-C1-DSCG1
-
-Leaf 2
-XR-T1 x XR-L1-C1-DSCG1
-
-Leaf 3
-XR-T1 x XR-L1-C1-DSCG1
-
-*/
