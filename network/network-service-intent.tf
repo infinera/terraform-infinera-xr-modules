@@ -10,8 +10,8 @@
 */
 variable "client-2-dscg" {
   type = map(map(object({
-    clientindex = number // index to module_clients list
-    dscgid   = string    
+    clientindex = optional(number) // index to module_clients list
+    dscgid   = optional(string)
     lctype = optional(string)
     capacity = optional(number)
     imc = optional(string)

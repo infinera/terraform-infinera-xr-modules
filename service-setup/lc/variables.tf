@@ -1,8 +1,3 @@
-// module resource  : xr.lcs
-// module URI       :(/lcs)
-
-
-
 
 variable "lctype" {
   type    = string

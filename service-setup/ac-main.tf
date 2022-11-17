@@ -1,8 +1,5 @@
-/* Configuring Hub and Leaf modules
+// Configuring Hub and Leaf modules
 
-*/
-
-// Hub
 module "ac" {
   source = "./ac"
   

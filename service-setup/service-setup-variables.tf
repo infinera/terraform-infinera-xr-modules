@@ -18,5 +18,5 @@ variable "acpres" {
 }
 
 variable "module_clients" {
-  type    = map(list(string))
+  type    = map(list(object({clientid = string, portspeed = optional(string)})))
 }
