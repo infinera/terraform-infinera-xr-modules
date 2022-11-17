@@ -11,6 +11,7 @@ data "xrcm_onlinedevices" "onlineleafdevices" {
   names = [for k,v in var.network.setup: k if v.moduleconfig["configuredrole"] == "leaf"]
 }
 
+
 locals {
   hub_names = length(var.filteredhub_names) > 0 ? setsubtract(data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name], var.filteredhub_names) : data.xrcm_onlinedevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlinehubdevices.devices : onlinedevice.name]
   leaf_names = length(var.filteredleaf_names) > 0 ? setsubtract(data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name], var.filteredleaf_names) : data.xrcm_onlinedevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_onlinedevices.onlineleafdevices.devices : onlinedevice.name]
