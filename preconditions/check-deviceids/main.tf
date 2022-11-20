@@ -22,7 +22,7 @@ locals {
   device_names = local.deviceid_checks != null ? [for k,v in local.deviceid_checks : upper("${k}")] : []
 }
 
-// example chek for IPM control
+// check module with same name but ID is different
 data "xrcm_check" "check_deviceid_mismatched" {
   depends_on        = [data.xrcm_devices.devices]
   condition = local.deviceid_checks == null || local.deviceid_checks == {}
