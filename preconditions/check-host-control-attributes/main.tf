@@ -7,8 +7,8 @@ terraform {
 }
 
 locals {
-  module_carriers = { for k,v in var.network.setup: k => v.modulecarriers[0]}
-  module_clients =  { for k,v in var.network.setup: k => v.moduleclients }
+  module_carriers = [ for k,v in var.network.setup: { n= k, lineptpid = v.lineptpid, carrierids = v.carrierids} ]
+  module_ethernets =  [ for k,v in var.network.setup: { n= k,  ethernetids = v.ethernetids} ]
 }
 
 data "xrcm_detaildevices" "onlinedevices" {
@@ -16,15 +16,18 @@ data "xrcm_detaildevices" "onlinedevices" {
   state = "ONLINE"
 }
 
-data "xrcm_carriers" "onlinedevices" {
-  names = [for k,v in var.network.setup: k ]
-  state = "ONLINE"
+data "xrcm_ethernets" "ethernets" {
+  moduleethernets = local.module_ethernets
+}
+
+data "xrcm_carriers" "carriers" {
+  modulecarriers = local.module_carriers
 }
 
 locals {
-
+  hostcontrols = []
+  check_ethernets = [for k,v in var.network.setup]
 }
-
 
 // check if module config attributes are controlled by host or not
 data "xrcm_check" "check_module_config_control" {

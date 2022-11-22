@@ -12,7 +12,7 @@ variable network {
                                         configuredrole = optional(string),
                                         trafficmode = optional(string)}),
                 moduleclients = list(object({clientid = string, portspeed = optional(string)})),
-                modulecarriers= list(object({lineptpid = string, carrierid = string, modulation = optional(string), clientportmode = optional(string), constellationfrequency = optional(number)}))
+                modulecarriers= list(object({lineptpid = string, carrierid = list(string), modulation = optional(string), clientportmode = optional(string), constellationfrequency = optional(number)}))
                 }))})
   description = "for each module, specify its config, it client port and line port "
   default = {
@@ -24,7 +24,7 @@ variable network {
         xr-regA_H1-Hub = {
           moduleconfig = { configuredrole = "hub"}
           moduleclients = [{ clientid = "1"}, { clientid = "2"}]
-          modulecarriers = [{ lineptpid = "1", carrierid = "1"}]
+          modulecarriers = [{ lineptpid = "1", carrierid = ["1"]}]
         }
         xr-regA_H1-L1 = {
           moduleconfig = { configuredrole = "leaf"}
