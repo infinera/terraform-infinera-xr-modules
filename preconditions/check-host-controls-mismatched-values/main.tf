@@ -20,9 +20,9 @@ data "xrcm_check_resources" "check_carriers" {
 
 locals {
   depends_on = [data.xrcm_check_resources.check_configs]
-  hostconfigs = {for config in data.xrcm_check_resources.check_configs.queries: config.n => flatten([ for res in config.resources : [for attributevalue in res.attributevalues : merge({ resourceid =  res.resourceid, resourcetype = config.resourcetype}, attributevalue) if attributevalue.attributecontrolbyhost == true ] ]) }
-  hostethernets = {for ethernet in data.xrcm_check_resources.check_ethernets.queries: ethernet.n => flatten([ for res in ethernet.resources : [for attributevalue in res.attributevalues : merge({ resourceid =  res.resourceid, resourcetype = ethernet.resourcetype}, attributevalue) if attributevalue.attributecontrolbyhost == true ] ]) }
-  hostcarriers =  {for carrier in data.xrcm_check_resources.check_carriers.queries: carrier.n => flatten([ for res in carrier.resources : [for attributevalue in res.attributevalues : merge({ resourceid =  res.resourceid, parentid =  res.parentid, resourcetype = carrier.resourcetype}, attributevalue) if attributevalue.attributecontrolbyhost == true ] ] )}
+  hostconfigs = {for config in data.xrcm_check_resources.check_configs.queries: config.n => flatten([ for res in config.resources : [for attributevalue in res.attributevalues : merge({ resourceid =  res.resourceid, resourcetype = config.resourcetype}, attributevalue) if attributevalue.attributecontrolbyhost == true && attributevalue.isvaluematch == false] ]) }
+  hostethernets = {for ethernet in data.xrcm_check_resources.check_ethernets.queries: ethernet.n => flatten([ for res in ethernet.resources : [for attributevalue in res.attributevalues : merge({ resourceid =  res.resourceid, resourcetype = ethernet.resourcetype}, attributevalue) if attributevalue.attributecontrolbyhost == true && attributevalue.isvaluematch == false] ]) }
+  hostcarriers =  {for carrier in data.xrcm_check_resources.check_carriers.queries: carrier.n => flatten([ for res in carrier.resources : [for attributevalue in res.attributevalues : merge({ resourceid =  res.resourceid, parentid =  res.parentid, resourcetype = carrier.resourcetype}, attributevalue) if attributevalue.attributecontrolbyhost == true && attributevalue.isvaluematch == false] ]) }
   hostconfigs_device_names = [for k,v  in local.hostconfigs : upper("${k}") if length(v) > 0]
   hostethernets_device_names = [for k,v  in local.hostethernets : upper("${k}") if length(v) > 0]
   hostcarriers_device_names = [for k,v  in local.hostcarriers : upper("${k}") if length(v) > 0]
