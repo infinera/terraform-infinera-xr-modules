@@ -6,12 +6,6 @@ terraform {
   }
 }
 
-provider "xrcm" {
-  username = "dev" 
-  password = "xrSysArch3"
-  host     = "https://sv-kube-prd.infinera.com:443"
-}
-
 data "xrcm_check_resources" "check_ethernets" {
   queries = [ for k,v in var.network.setup: { n = k, resourcetype = "Ethernet", resources = [ for client in v["moduleclients"]: {resourceid = client.clientid, attributevalues = [{ attribute = "portSpeed", intentvalue = client.portspeed, controlattribute = "portSpeedControl"}]} ] } ]
 }
