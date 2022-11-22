@@ -23,12 +23,12 @@ variable network {
       setup = {
         xr-regA_H1-Hub = {
           moduleconfig = { configuredrole = "hub", trafficmode ="L1Mode"}
-          moduleclients = [{ clientid = "1", portspeed="100"}, { clientid = "2",portspeed="200"}]
+          moduleclients = [{ clientid = "1", portspeed="100"}, { clientid = "2",portspeed="100"}]
           modulecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"}]
         }
         xr-regA_H1-L1 = {
-          moduleconfig = { configuredrole = "leaf", trafficmode ="L1Mode"}
-          moduleclients = [{ clientid = "1", portspeed="100"}]
+          moduleconfig = { configuredrole = "leaf", trafficmode ="L2Mode"}
+          moduleclients = [{ clientid = "1", portspeed="300"}]
           modulecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"} ]
         }
         /*xr-regA_H1-L2 = {

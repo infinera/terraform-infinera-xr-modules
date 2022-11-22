@@ -6,6 +6,12 @@ terraform {
   }
 }
 
+provider "xrcm" {
+  username = "dev" 
+  password = "xrSysArch3"
+  host     = "https://sv-kube-prd.infinera.com:443"
+}
+
 data "xrcm_check_resources" "check_ethernets" {
   queries = [ for k,v in var.network.setup: { n = k, resourcetype = "Ethernet", resources = [ for client in v["moduleclients"]: {resourceid = client.clientid, attributevalues = [{ attribute = "portSpeed", intentvalue = client.portspeed, controlattribute = "portSpeedControl"}]} ] } ]
 }
@@ -57,18 +63,18 @@ data "xrcm_checks" "check_resources" {
   checks = [
     {
       condition = length(local.hostconfigs_device_names) > 0
-      description = "Check if Device configs is controlled by Host: ${join(",", local.hostconfigs_device_names)}"
+      description = "Check if Devices'configs are controlled by Host: ${join(",", local.hostconfigs_device_names)}"
       throw = "Module Configs are controlled by Host: Can't configure unless IPM is the controller.\n ${jsonencode(local.hostconfigs)}"
     },
     {
       condition = length(local.hostethernets_device_names) > 0
-      description = "Check if Host is modules'configs controller: ${join(",", local.hostethernets_device_names)}"
-      throw = "Ethernets' attributes are controlled by Host: Can't configure unless IPM is the controller.\n ${jsonencode(local.hostethernets)}"
+      description = "Check if Ethernet ports' Speeds controlled by Host: ${join(",", local.hostethernets_device_names)}"
+      throw = "These Ethernets' attributes are controlled by Host: Can't configure unless IPM is the controller.\n ${jsonencode(local.hostethernets)}"
     },
     {
       condition = length(local.hostcarriers_device_names) > 0
-      description = "Check if Host is modules'configs controller: ${join(",", local.hostcarriers_device_names)}"
-      throw = "Ethernets' attributes are controlled by Host: nCan't configure unless IPM is the controller.\n ${jsonencode(local.hostcarriers)}"
+      description = "Check if Carriers' Modulations are controlled by Host: ${join(",", local.hostcarriers_device_names)}"
+      throw = "These Carrier' attributes are controlled by Host: nCan't configure unless IPM is the controller.\n ${jsonencode(local.hostcarriers)}"
     },
   ]
 }
