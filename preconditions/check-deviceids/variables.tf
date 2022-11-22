@@ -1,11 +1,11 @@
 variable "devices_file" {
   type    = string
-  default = ""
+  default = "./tf_devices.json"
 }
 
 variable "device_names" {
   type    = list
-  default = []
+  default = ["xr-regA_H1-L1", "xr-regA_H1-Hub"]
 }
 
 variable "state" {

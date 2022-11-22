@@ -1,10 +1,10 @@
-terraform {
+/*terraform {
   required_providers {
     xrcm = {
       source = "infinera.com/poc/xrcm"
     }
   }
-}
+}*/
 
 data "xrcm_devices" "devices" {
   names = var.device_names 
@@ -22,12 +22,12 @@ locals {
   device_names = local.deviceid_checks != null ? [for k,v in local.deviceid_checks : upper("${k}")] : []
 }
 
-// check module with same name but ID is different
+// check module with same name but ID is diff
 data "xrcm_check" "check_deviceid_mismatched" {
   depends_on        = [data.xrcm_devices.devices]
-  condition = local.deviceid_checks == null || local.deviceid_checks == {}
+  condition = local.deviceid_checks != null && length(local.deviceid_checks) > 0
   description = "Check devices ids mismatched: ${join(",", local.device_names)}"
-  throw = "ID(s) Mismacthed:\n${join("\n", local.deviceid_checks_outputs)}"
+  throw = "ID(s) Mismatched:\n${join("\n", local.deviceid_checks_outputs)}"
 }
 
 
