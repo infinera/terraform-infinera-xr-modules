@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    xrcm = {
+      source = "infinera.com/poc/xrcm"
+    }
+  }
+}
+
 data "xrcm_devices" "devices" {
   names = var.device_names 
   state = var.state

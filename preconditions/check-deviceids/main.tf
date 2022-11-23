@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    xrcm = {
+      source = "infinera.com/poc/xrcm"
+    }
+  }
+}
+
 module  "get_devices_with_different_ids" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_devices_with_different_ids"
   //source = "../../../terraform-infinera-xr-modules/utils/get_devices_with_different_ids"
