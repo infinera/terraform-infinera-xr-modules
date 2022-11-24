@@ -23,8 +23,3 @@ output "checked_attributes" {
 output devices_attributes {
   value = local.devices_attributes
 }
-
-output device_names {
-  value = local.device_names
-}
-
