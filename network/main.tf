@@ -23,7 +23,7 @@ locals {
 }
 
 module "network-setup" {
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//network-setup"
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//network_setup"
   //source = "../network-setup"
 
   hub_names = local.hub_names
@@ -33,7 +33,7 @@ module "network-setup" {
 
 module "bandwidth-setup" {
   depends_on        = [module.network-setup]
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//bandwidth-setup"
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//bandwidth_setup"
   //source = "../bandwidth-setup"
   hub_names = local.hub_names
   leaf_names = local.leaf_names
@@ -45,7 +45,7 @@ module "bandwidth-setup" {
 
 module "service-setup" {
   depends_on        = [module.bandwidth-setup]
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//service-setup"
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//service_setup"
   //source = "../service-setup"
   hub_names = local.hub_names
   leaf_names = local.leaf_names
