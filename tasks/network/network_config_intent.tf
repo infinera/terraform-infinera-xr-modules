@@ -41,7 +41,7 @@ variable network {
           deviceclients = [{ clientid = "1", portspeed="100"}]
           devicecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"} ]
         }
-        /*xr-regA_H1-L2 = {
+        xr-regA_H1-L2 = {
           deviceconfig = { configuredrole = "leaf", trafficmode ="L1Mode"}
           deviceclients = [{ clientid = "1", portspeed="100"}]
           devicecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"} ]
@@ -75,7 +75,7 @@ variable network {
           deviceconfig = { configuredrole = "leaf", trafficmode ="L1Mode"}
           deviceclients = [{ clientid = "1", portspeed="100"}]
           devicecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"} ]
-        }*/
+        }
       }
     }
 }

@@ -1,4 +1,4 @@
-variable test {
+variable codition {
   type = bool
 	default = false
 }
