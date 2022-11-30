@@ -21,8 +21,8 @@ data "xrcm_check_resources" "resources" {
 }
 
 module "filter_checked_resources" {
-  //source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/filter_resources"
-  source = "../filter_checked_resources"
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/filter_checked_resources"
+  //source = "../filter_checked_resources"
   filter = var.filter
   devices_resources = data.xrcm_check_resources.resources.queries
 }
