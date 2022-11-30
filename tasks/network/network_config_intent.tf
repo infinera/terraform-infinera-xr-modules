@@ -1,13 +1,9 @@
 
-variable filteredhub_names {
+variable filtered_devices {
   type = list(string)
   default = []
 }
 
-variable filteredleaf_names {
-  type = list(string)
-  default = []
-}
 // Map of module names to map of module config, clients and lines
 variable network {
   type = object({

@@ -1,4 +1,14 @@
 
+variable assert {
+  type = bool
+  default = true
+}
+
+variable "devices_file" {
+  type    = string
+   default = "./tf_devices.json"
+}
+
 variable filteredhub_names {
   type = list(string)
   default = []

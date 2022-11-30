@@ -1,56 +1,74 @@
 
+terraform {
+  required_providers {
+    xrcm = {
+      source = "infinera.com/poc/xrcm"
+    }
+  }
+}
+
+provider "xrcm" {
+  username = "dev"
+  password = "xrSysArch3"
+  host     = "https://sv-kube-prd.infinera.com:443"
+}
+
 // This module initializes the:
 // network
 // bandwidht
 // service
+module  "get_devices_with_different_ids"{
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_devices_with_different_ids"
+  //source = "../../utils/get_devices_with_different_ids"
 
-data "xrcm_detaildevices" "onlinehubdevices" {
-  names = [for k,v in var.network.setup: k if v.deviceconfig["configuredrole"] == "hub"]
+  device_names = [for k,v in var.network.setup: k]
   state = "ONLINE"
+  devices_file = var.devices_file
+  save_file = false //var.save_file
 }
-
-data "xrcm_detaildevices" "onlineleafdevices" {
-  names = [for k,v in var.network.setup: k if v.deviceconfig["configuredrole"] == "leaf"]
-  state = "ONLINE"
-}
-
 
 locals {
-  hub_names = length(var.filteredhub_names) > 0 ? setsubtract(data.xrcm_detaildevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_detaildevices.onlinehubdevices.devices : onlinedevice.name], var.filteredhub_names) : data.xrcm_detaildevices.onlinehubdevices.devices == null ? [] : [for onlinedevice in data.xrcm_detaildevices.onlinehubdevices.devices : onlinedevice.name]
-  leaf_names = length(var.filteredleaf_names) > 0 ? setsubtract(data.xrcm_detaildevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_detaildevices.onlineleafdevices.devices : onlinedevice.name], var.filteredleaf_names) : data.xrcm_detaildevices.onlineleafdevices.devices == null ? [] : [for onlinedevice in data.xrcm_detaildevices.onlineleafdevices.devices : onlinedevice.name]
-  module_carriers = { for k,v in var.network.setup: k => v.devicecarriers[0]}
-  module_clients =  { for k,v in var.network.setup: k => v.deviceclients }
+  ids_mismatched_devices = module.get_devices_with_different_ids.devices
+  ids_mismatched = local.ids_mismatched_devices !=  null
+  deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.ids_mismatched_devices : "Module:${upper(k)}, SavedID:${v.saved_deviceid}, NetworkID:${v.network_deviceid}"] : []
+  device_names = local.ids_mismatched != null ? [for k,v in local.ids_mismatched_devices : upper("${k}")] : []
 }
 
-module "network-setup" {
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//network_setup"
-  //source = "../network-setup"
+// check module with same name but ID is diff
+data "xrcm_check" "check_deviceid_mismatched" {
+  depends_on = [module.get_devices_with_different_ids.hubs, module.get_devices_with_different_ids.leafs]
 
-  hub_names = local.hub_names
-  leaf_names = local.leaf_names
-  trafficmode = var.network.configs.trafficmode
+  count = var.assert ? 1 : 0
+  condition = local.ids_mismatched
+  description = "Devices ids are mismatched: ${join(", ", local.device_names)}"
+  throw = "ID(s) Mismatched:\n${join("\n", local.deviceid_checks_outputs)}"
 }
 
-module "bandwidth-setup" {
-  depends_on        = [module.network-setup]
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//bandwidth_setup"
-  //source = "../bandwidth-setup"
-  hub_names = local.hub_names
-  leaf_names = local.leaf_names
+// Set up the Constellation Network
+module "network" {
+  depends_on = [data.xrcm_check.check_deviceid_mismatched]
+
+  count = ids_mismatched ? 1 : 0
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//network"
+  //source = "../network"
+
+  network = var.network
   leaf_bandwidth = var.leaf_bandwidth
   hub_bandwidth = var.hub_bandwidth
-  trafficmode = var.network.configs.trafficmode
-  module_carriers = local.module_carriers
+  client-2-dscg     = var.client-2-dscg
+  filtered_devices = [for k,v in local.ids_mismatched_devices : k]
 }
 
-module "service-setup" {
-  depends_on        = [module.bandwidth-setup]
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//service_setup"
-  //source = "../service-setup"
-  hub_names = local.hub_names
-  leaf_names = local.leaf_names
-  client-2-dscg     = var.client-2-dscg
-  trafficmode = var.network.configs.trafficmode
-  module_carriers = local.module_carriers
-  module_clients = local.module_clients
+module "network" {
+  depends_on = [data.xrcm_check.check_deviceid_mismatched]
+
+  count = ids_mismatched ? 0 : 1
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//network"
+  //source = "../network"
+
+  network = var.network
+  leaf_bandwidth = var.leaf_bandwidth
+  hub_bandwidth = var.hub_bandwidth
+  client-2-dscg     = var.client-2-dsc
 }
+
