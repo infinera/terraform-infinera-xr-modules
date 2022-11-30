@@ -1,14 +1,39 @@
+// Map of device names to map of device config, clients and lines
+variable resource_type {
+  type = string
+  default = "Device"
+  // Device
+  // DeviceConfig
+  // Ethernet
+  // Carrier
+  // DSC
+  // DSCG
+}
 
-variable filteredhub_names {
-  type = list(string)
+variable condition {
+  type = string
+  default = "Mismatched"
+  // HostAttribute
+  // HostAttributeNMismatched
+  // HostAttributeNMatched
+  // NonHostAttribute
+  // NonHostAttributeNMismatched
+  // NonHostAttributeNMatched
+  // Matched
+  // Mismatched
+}
+
+variable message {
+  type = string
+  default = "Testing"
+}
+
+variable queries {
+  type =  list(object({ n= string, resourcetype = string, 
+                        resources = list(object({resourceid = string, attributevalues = string, controlattribute = string, parentid= optional(string), parentid= optional(string), grandparentid = optional(string)})) }))
   default = []
 }
 
-variable filteredleaf_names {
-  type = list(string)
-  default = []
-}
-// Map of module names to map of module config, clients and lines
 variable network {
   type = object({
       configs = object({

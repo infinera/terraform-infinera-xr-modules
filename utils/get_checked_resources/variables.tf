@@ -1,14 +1,23 @@
+// Map of device names to map of device config, clients and lines
+variable resource_type {
+  type = string
+  default = "Carrier"
+  // Device
+  // DeviceConfig
+  // Ethernet
+  // Carrier
+  // DSC
+  // DSCG
+}
 
-variable filteredhub_names {
-  type = list(string)
+
+variable queries {
+  type =  list(object({ n= string, resourcetype = string, 
+                        resources = list(object({resourceid = string, attributevalues = string, controlattribute = string, parentid= optional(string), parentid= optional(string), grandparentid = optional(string)})) }))
   default = []
 }
 
-variable filteredleaf_names {
-  type = list(string)
-  default = []
-}
-// Map of module names to map of module config, clients and lines
+
 variable network {
   type = object({
       configs = object({
@@ -34,13 +43,13 @@ variable network {
                 }
       setup = {
         xr-regA_H1-Hub = {
-          device = { di = "76e073d6-4570-4111-4853-3bd52878dfa2", sv = "2.00"}
+          device = { di = "76e073d6-4570-4111-4853-3bd52878dfa5", sv = "1.00"}
           deviceconfig = { configuredrole = "hub", trafficmode ="L1Mode"}
           deviceclients = [{ clientid = "1", portspeed="100"}, { clientid = "2",portspeed="200"}]
           devicecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"}]
         }
         xr-regA_H1-L1 = {
-          device = { di = "6cdcde2b-c839-4322-6010-0659a2fe11b1", sv = "1.00"}
+          device = { di = "76e073d6-4570-4111-4853-3bd52878dfa5", sv = "1.00"}
           deviceconfig = { configuredrole = "leaf", trafficmode ="L1Mode"}
           deviceclients = [{ clientid = "1", portspeed="100"}]
           devicecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"} ]
