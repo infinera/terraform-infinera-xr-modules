@@ -7,12 +7,6 @@ terraform {
   }
 }
 
-provider "xrcm" {
-  username = "dev"
-  password = "xrSysArch3"
-  host     = "https://sv-kube-prd.infinera.com:443"
-}
-
 // Set up the Constellation Network
 module "network" {
 
