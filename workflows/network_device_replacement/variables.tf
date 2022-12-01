@@ -2,7 +2,7 @@
 // Otherwise run with the filtered device to cleanup the network for the mismatched ID devices
 variable assert {
   type = bool
-  default = true
+  default = false
 }
 
 variable "devices_file" {

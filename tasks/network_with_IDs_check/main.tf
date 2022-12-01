@@ -7,16 +7,6 @@ terraform {
   }
 }
 
-provider "xrcm" {
-  username = "dev"
-  password = "xrSysArch3"
-  host     = "https://sv-kube-prd.infinera.com:443"
-}
-
-// This module initializes the:
-// network
-// bandwidht
-// service
 module  "get_devices_with_different_ids"{
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_devices_with_different_ids"
   //source = "../../utils/get_devices_with_different_ids"
