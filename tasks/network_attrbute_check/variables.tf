@@ -7,6 +7,7 @@ variable assert {
 
 variable resource_type {
   type = string
+  default = "Ethernet"
 }
 
 variable condition {

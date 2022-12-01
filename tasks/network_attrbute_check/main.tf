@@ -23,15 +23,15 @@ module  "get_and_filter_checked_resources"{
 }
 
 locals {
-  host_control_resources = module.get_and_filter_checked_resources.resources
+  resources = module.get_and_filter_checked_resources.resources
   device_names = module.get_and_filter_checked_resources.device_names
-  host_control = length(local.device_names) > 0
-  host_control_checks_outputs = local.host_control ? [for k,v in local.host_control_resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
+  found = length(local.device_names) > 0
+  host_control_checks_outputs = local.found ? [for k,v in local.resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
   upper_device_names = [for k in local.device_names : "${upper(k)}"]
 }
 
 output "message" {
-  value = local.host_control && !var.assert ? "Not Assert. Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nAction: Continue to run" : ""
+  value = local.found && !var.assert ? "Not Assert. Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nAction: Continue to run" : ""
 }
 
 // check module with mismatched version
@@ -39,10 +39,15 @@ data "xrcm_check" "check_host_control" {
   depends_on = [module.get_and_filter_checked_resources] 
 
   count = var.assert ? 1 : 0
-  condition = local.host_control
+  condition = local.found
   description = "Devices with <<${var.condition}>> attributes: ${join(":::", local.upper_device_names)}"
-  throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nHost controlled and mismatched attributes can not be updated by IPM.\nTo continue the run for other devices which has no <<${var.condition}>> condition; please set 'assert' to false"
+  throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no configuration on Host attributes; please set 'assert' to false"
 }
 
+output "resources" {
+  value = local.resources
+}
 
-
+output "device_names" {
+  value = local.device_names
+}

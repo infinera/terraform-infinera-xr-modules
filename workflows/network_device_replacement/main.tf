@@ -1,4 +1,3 @@
-
 terraform {
   required_providers {
     xrcm = {
@@ -7,19 +6,9 @@ terraform {
   }
 }
 
-provider "xrcm" {
-  username = "dev"
-  password = "xrSysArch3"
-  host     = "https://sv-kube-prd.infinera.com:443"
-}
-
-// This module initializes the:
-// network
-// bandwidht
-// service
 module  "network_with_IDs_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_IDs_check"
-  //source = "../../workflows/network_with_IDs_check"
+  //source = "../../tasks/network_with_IDs_check"
 
   assert = var.assert
   devices_file = var.devices_file
@@ -34,7 +23,7 @@ module "network" {
   depends_on = [module.network_with_IDs_check]
 
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-  //source = "../network"
+  //source = "source = "../../tasks/network"
 
   network = var.network
   leaf_bandwidth = var.leaf_bandwidth

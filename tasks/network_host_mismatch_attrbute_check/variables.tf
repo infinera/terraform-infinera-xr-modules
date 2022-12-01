@@ -7,7 +7,7 @@ variable assert {
 
 variable condition {
   type = string
-  default = "HostAttributeNMismatched"
+  default = "HostAttribute"
   #  Support Values = HostAttribute, HostAttributeNMismatched, HostAttributeNMatched, NonHostAttribute, NonHostAttributeNMismatched, NonHostAttributeNMatched,  Matched, Mismatched
 }
 

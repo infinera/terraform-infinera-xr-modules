@@ -1,16 +1,9 @@
-
 terraform {
   required_providers {
     xrcm = {
       source = "infinera.com/poc/xrcm"
     }
   }
-}
-
-provider "xrcm" {
-  username = "dev"
-  password = "xrSysArch3"
-  host     = "https://sv-kube-prd.infinera.com:443"
 }
 
 module  "get_and_filter_checked_resources"{
@@ -23,10 +16,10 @@ module  "get_and_filter_checked_resources"{
 }
 
 locals {
-  vesrion_mismatched_resources = module.get_and_filter_checked_resources.resources
+  resources = module.get_and_filter_checked_resources.resources
   device_names = module.get_and_filter_checked_resources.device_names
   version_mismatched = length(local.device_names) > 0
-  device_version_checks_outputs = local.version_mismatched ? [for k,v in local.vesrion_mismatched_resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
+  device_version_checks_outputs = local.version_mismatched ? [for k,v in local.resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
   upper_device_names = [for k in local.device_names : "${upper(k)}"]
 }
 
@@ -44,17 +37,12 @@ data "xrcm_check" "check_device_version_mismatched" {
   throw = "Devices with Mismatched Software Version:\n${join("\n", local.device_version_checks_outputs)}\n\n Please upgrade the Device if required or set 'assert' to false then run again."
 }
 
-// Set up the Constellation Network
-module "network" {
-  depends_on = [data.xrcm_check.check_device_version_mismatched]
+output "resources" {
+   value = local.resources
+}
 
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-  //source = "../network"
-
-  network = var.network
-  leaf_bandwidth = var.leaf_bandwidth
-  hub_bandwidth = var.hub_bandwidth
-  client-2-dscg     = var.client-2-dscg
+output "device_names" {
+  value = local.device_names
 }
 
 

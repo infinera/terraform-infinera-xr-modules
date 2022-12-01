@@ -1,4 +1,3 @@
-
 terraform {
   required_providers {
     xrcm = {
@@ -18,10 +17,10 @@ module  "get_devices_with_different_ids"{
 }
 
 locals {
-  id_mismatched_devices = module.get_devices_with_different_ids.devices
-  ids_mismatched = length(local.id_mismatched_devices) > 0
-  deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.id_mismatched_devices : "Module:${upper(k)}, SavedID: ${v.saved_deviceid}, DeviceID: ${v.network_deviceid}"] : []
-  device_names = local.ids_mismatched != null ? [for k,v in local.id_mismatched_devices : k ] : []
+  devices = module.get_devices_with_different_ids.devices
+  ids_mismatched = length(local.devices) > 0
+  deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.devices : "Module:${upper(k)}, SavedID: ${v.saved_deviceid}, DeviceID: ${v.network_deviceid}"] : []
+  device_names = local.ids_mismatched != null ? [for k,v in local.devices : k ] : []
   upper_device_names = [for k in local.device_names : upper("${k}")]
 }
 
@@ -39,8 +38,8 @@ data "xrcm_check" "check_deviceid_mismatched" {
   throw = "ID(s) Mismatched:\n${join("\n", local.deviceid_checks_outputs)}"
 }
 
-output "id_mismatched_devices" {
-   value = local.id_mismatched_devices
+output "devices" {
+   value = local.devices
 }
 
 output "device_names" {
