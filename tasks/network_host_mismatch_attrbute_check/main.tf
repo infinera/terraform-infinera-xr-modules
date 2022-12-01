@@ -44,17 +44,5 @@ data "xrcm_check" "check_host_control" {
   throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nHost controlled and mismatched attributes can not be updated by IPM.\nTo continue the run for other devices which has no <<${var.condition}>> condition; please set 'assert' to false"
 }
 
-// Set up the Constellation Network
-/*module "network" {
-  depends_on = [data.xrcm_check.check_host_control]
-
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-  //source = "../network"
-
-  network = var.network
-  leaf_bandwidth = var.leaf_bandwidth
-  hub_bandwidth = var.hub_bandwidth
-  client-2-dscg     = var.client-2-dscg
-}*/
 
 

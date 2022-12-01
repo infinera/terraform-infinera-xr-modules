@@ -28,10 +28,10 @@ module  "get_devices_with_different_ids"{
 }
 
 locals {
-  ids_mismatched_devices = module.get_devices_with_different_ids.devices
-  ids_mismatched = length(local.ids_mismatched_devices) > 0
-  deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.ids_mismatched_devices : "Module:${upper(k)}, SavedID: ${v.saved_deviceid}, DeviceID: ${v.network_deviceid}"] : []
-  device_names = local.ids_mismatched != null ? [for k,v in local.ids_mismatched_devices : k ] : []
+  id_mismatched_devices = module.get_devices_with_different_ids.devices
+  ids_mismatched = length(local.id_mismatched_devices) > 0
+  deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.id_mismatched_devices : "Module:${upper(k)}, SavedID: ${v.saved_deviceid}, DeviceID: ${v.network_deviceid}"] : []
+  device_names = local.ids_mismatched != null ? [for k,v in local.id_mismatched_devices : k ] : []
   upper_device_names = [for k in local.device_names : upper("${k}")]
 }
 
@@ -49,18 +49,12 @@ data "xrcm_check" "check_deviceid_mismatched" {
   throw = "ID(s) Mismatched:\n${join("\n", local.deviceid_checks_outputs)}"
 }
 
-// Set up the Constellation Network
-module "network" {
-  depends_on = [data.xrcm_check.check_deviceid_mismatched]
+output "id_mismatched_devices" {
+   value = local.id_mismatched_devices
+}
 
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-  //source = "../network"
-
-  network = var.network
-  leaf_bandwidth = var.leaf_bandwidth
-  hub_bandwidth = var.hub_bandwidth
-  client-2-dscg     = var.client-2-dscg
-  filtered_devices = local.device_names
+output "device_names" {
+  value = local.device_names
 }
 
 

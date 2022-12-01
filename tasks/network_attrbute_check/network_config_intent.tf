@@ -1,14 +1,4 @@
 
-variable assert {
-  type = bool
-  default = true
-}
-
-variable condition {
-  type = string
-  default = "HostAttributeNMismatched"
-}
-
 // Map of module names to map of module config, clients and lines
 variable network {
   type = object({

@@ -1,14 +1,7 @@
 variable filter {
   type = string
   default = "Mismatched"
-  // HostAttribute
-  // HostAttributeNMismatched
-  // HostAttributeNMatched
-  // NonHostAttribute
-  // NonHostAttributeNMismatched
-  // NonHostAttributeNMatched
-  // Matched
-  // Mismatched
+  #  Support Values = HostAttribute, HostAttributeNMismatched, HostAttributeNMatched, NonHostAttribute, NonHostAttributeNMismatched, NonHostAttributeNMatched,  Matched, Mismatched
 }
 
 variable devices_resources {

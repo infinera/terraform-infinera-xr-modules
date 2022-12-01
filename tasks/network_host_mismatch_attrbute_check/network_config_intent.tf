@@ -1,22 +1,5 @@
-// Map of device names to map of device config, clients and lines
-variable resource_type {
-  type = string
-  default = "Ethernet"
-  # Support Types:  Device, DeviceConfig, Ethernet, Carrier, DSC, DSCG, LC, AC
-}
 
-variable filter {
-  type = string
-  default = "HostAttributeNMismatched"
-  #  Support Values = HostAttribute, HostAttributeNMismatched, HostAttributeNMatched, NonHostAttribute, NonHostAttributeNMismatched, NonHostAttributeNMatched,  Matched, Mismatched
-}
-
-variable queries {
-  type =  list(object({ n= string, resourcetype = string, 
-                        resources = list(object({resourceid = string, attributevalues = string, controlattribute = string, parentid= optional(string), parentid= optional(string), grandparentid = optional(string)})) }))
-  default = []
-}
-
+// Map of module names to map of module config, clients and lines
 variable network {
   type = object({
       configs = object({
@@ -42,7 +25,7 @@ variable network {
                 }
       setup = {
         xr-regA_H1-Hub = {
-          device = { di = "76e073d6-4570-4111-4853-3bd52878dfa2", sv = "1.00"}
+          device = { di = "76e073d6-4570-4111-4853-3bd52878dfa2", sv = "2.00"}
           deviceconfig = { configuredrole = "hub", trafficmode ="L1Mode"}
           deviceclients = [{ clientid = "1", portspeed="100"}, { clientid = "2",portspeed="200"}]
           devicecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"}]
