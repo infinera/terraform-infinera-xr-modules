@@ -1,7 +1,7 @@
 
 variable assert {
   type = bool
-  default = false
+  default = true
 }
 
 variable condition {
