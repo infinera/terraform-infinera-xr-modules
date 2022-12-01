@@ -25,7 +25,7 @@ module "network_host_mismatch_attribute_check" {
 }
 
 output "host_attribute_mismatch_check_message" {
-  value = length(module.network_host_mismatch_attrbute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attrbute_check.device_names)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeMismatched' to asserts" : " There is no mismatched host attribute"
+  value = length(module.network_host_mismatch_attribute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attribute_check.device_names)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeMismatched' to asserts" : " There is no mismatched host attribute"
 }
 
 // Set up the Constellation Network
