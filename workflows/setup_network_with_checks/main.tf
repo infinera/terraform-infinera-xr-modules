@@ -13,13 +13,13 @@ module "network_with_versions_check" {
   assert = contains(var.asserts, "Version")
 }
 
-output "check_devices_version_message" {
-  value = length(module.network_with_versions_check.device_names) > 0 ? "Devices with mismatched version:\n${join("\n", module.network_with_versions_check.device_names)}\n\nContinue to run the workflow with the assumption that the different device software versions are compatible" : "There is no device with different version"
+output "devices_version_check_message" {
+  value = length(module.network_with_versions_check.device_names) > 0 ? "Devices with mismatched version:\n${join("\n", module.network_with_versions_check.device_names)}\n\nContinue to run the workflow with the assumption that the different device software versions are compatible" : "All devices' version are matched or compatible."
 }
 
 module "network_host_mismatch_attribute_check" {
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_host_mismatch_attrbute_check"
-  //source = "../../tasks/network_host_mismatch_attrbute_check"
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_host_mismatch_attribute_check"
+  //source = "../../tasks/network_host_mismatch_attribute_check"
 
   assert = contains(var.asserts, "HostAttributeMismatched")
 }
