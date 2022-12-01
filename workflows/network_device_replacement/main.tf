@@ -8,7 +8,7 @@ module  "network_with_IDs_check" {
 }
 
 output "message" {
-  value = length(module.network_with_IDs_check.device_names) > 0 ? "Devices with ID(s) Mismatched:\n${join("\n", module.network_with_IDs_check.device_names)}\n\nThe mismatched devices shall be filtered out from the hub and leaf devices. \nThis shall clean up the state and remove all dangling resources in these ID mismatched devices" : " There is no ID mismatched devices. All devices are configured."
+  value = length(module.network_with_IDs_check.device_names) > 0 ? "Devices with ID(s) Mismatched:\n${join("\n", module.network_with_IDs_check.device_names)}\n\nThe mismatched devices shall be filtered out from the hub and leaf devices. \nThis shall clean up the state and remove all dangling resources in these ID mismatched devices" : " There is no ID mismatched devices."
 }
 
 // Set up the Constellation Network
@@ -24,5 +24,3 @@ module "network" {
   client-2-dscg     = var.client-2-dscg
   filtered_devices = module.network_with_IDs_check.device_names
 }
-
-

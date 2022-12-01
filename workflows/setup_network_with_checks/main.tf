@@ -13,11 +13,11 @@ module "network_with_versions_check" {
   assert = contains(var.asserts, "Version")
 }
 
-output "Devices_version_check_message" {
-  value = length(module.network_with_versions_check.device_names) > 0 ? "Devices with mismatched version:\n${join("\n", module.network_with_versions_check.device_names)}\n\nContinue to run the workflow with the assumption that the different device software versions are compatible" : ""
+output "check_devices_version_message" {
+  value = length(module.network_with_versions_check.device_names) > 0 ? "Devices with mismatched version:\n${join("\n", module.network_with_versions_check.device_names)}\n\nContinue to run the workflow with the assumption that the different device software versions are compatible" : "There is no device with different version"
 }
 
-module "network_host_mismatch_attrbute_check" {
+module "network_host_mismatch_attribute_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_host_mismatch_attrbute_check"
   //source = "../../tasks/network_host_mismatch_attrbute_check"
 
@@ -25,7 +25,7 @@ module "network_host_mismatch_attrbute_check" {
 }
 
 output "host_attribute_mismatch_check_message" {
-  value = length(module.network_host_mismatch_attrbute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attrbute_check.device_names)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeMismatched' to asserts" : ""
+  value = length(module.network_host_mismatch_attrbute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attrbute_check.device_names)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeMismatched' to asserts" : " There is no mismatched host attribute"
 }
 
 // Set up the Constellation Network
