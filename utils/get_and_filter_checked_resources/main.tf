@@ -36,7 +36,7 @@ output "xrcm_check_resources" {
 }*/
 
 output "resources" {
-  value = module.filter_checked_resources
+  value = module.filter_checked_resources.resources
 }
 
 output device_names {

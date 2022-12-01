@@ -23,19 +23,15 @@ module  "get_and_filter_checked_resources"{
 }
 
 locals {
-  host_control_resources = { for k, v in module.get_and_filter_checked_resources.resources : k => v if length(v) > 0}
-  host_control = length(local.host_control_resources) > 0
+  host_control_resources = module.get_and_filter_checked_resources.resources
+  device_names = module.get_and_filter_checked_resources.device_names
+  host_control = length(local.device_names) > 0
   host_control_checks_outputs = local.host_control ? [for k,v in local.host_control_resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
-  device_names = local.host_control ? [for k,v in local.host_control_resources : k ] : []
   upper_device_names = [for k in local.device_names : "${upper(k)}"]
 }
 
 output "message" {
   value = local.host_control && !var.assert ? "Not Assert. Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nAction: Continue to run" : ""
-}
-
-output "resources" {
-  value = local.host_control_resources
 }
 
 // check module with mismatched version
