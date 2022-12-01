@@ -18,7 +18,7 @@ variable network {
                 devicecarriers= optional(list(object({lineptpid = string, carrierid = string, modulation = optional(string), clientportmode = optional(string), constellationfrequency = optional(number)})))
                 }))})
   description = "for each device, specify its config, it client port and line port "
-  default = {
+  /*default = {
       configs = { portspeed = ""
                   trafficmode = "L2Mode"
                   modulation = "" 
@@ -73,4 +73,4 @@ variable network {
         }
       }
     }
-}
+*/}
