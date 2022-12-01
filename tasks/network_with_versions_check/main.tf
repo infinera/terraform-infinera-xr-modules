@@ -24,7 +24,7 @@ module  "get_and_filter_checked_resources"{
 
 locals {
   vesrion_mismatched_resources = module.get_and_filter_checked_resources.resources
-  device_names = module.get_and_filter_checked_resources.devices_names
+  device_names = module.get_and_filter_checked_resources.device_names
   version_mismatched = length(local.device_names) > 0
   device_version_checks_outputs = local.version_mismatched ? [for k,v in local.vesrion_mismatched_resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
   upper_device_names = [for k in local.device_names : "${upper(k)}"]
