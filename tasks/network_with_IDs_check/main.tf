@@ -35,15 +35,6 @@ locals {
   upper_device_names = [for k in local.device_names : upper("${k}")]
 }
 
-module "print_message" {
-    //source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/print_message"
-    source = "../../utils/print_message"
-
-    count = local.ids_mismatched ? 1 : 0
-    title = upper("Devices with Mismatched IDs")
-    message = "ID(s) Mismatched:\n${join("\n", local.deviceid_checks_outputs)}"
-}
-
 output "message" {
   value = local.ids_mismatched && !var.assert ? "Not Assert. ID(s) Mismatched:\n${join("\n", local.deviceid_checks_outputs)}\n\nAction: Continue to run with filtering the mismatched devices listed above" : ""
 }
