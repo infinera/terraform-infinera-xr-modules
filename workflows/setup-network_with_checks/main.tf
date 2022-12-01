@@ -7,8 +7,8 @@ terraform {
 }
 
 module "network_with_versions_check" {
-  //source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_versions_check"
-  source = "../../tasks/network_with_versions_check"
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_versions_check"
+  //source = "../../tasks/network_with_versions_check"
 
   assert = var.assert
 }
