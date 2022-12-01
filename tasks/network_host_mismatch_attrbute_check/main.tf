@@ -35,7 +35,7 @@ data "xrcm_check" "check_host_control" {
   count = var.assert ? 1 : 0
   condition = local.host_control
   description = "Devices with <<${var.condition}>> attributes: ${join(":::", local.upper_device_names)}"
-  throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no configuration on Host attributes; please set 'assert' to false"
+  throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no conflict>> condition; please set 'assert' to false or remove the <<${var.condition}>> from 'asserts' settings. "
 }
 
 output "resources" {

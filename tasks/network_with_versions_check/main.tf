@@ -34,7 +34,7 @@ data "xrcm_check" "check_device_version_mismatched" {
   count = var.assert ? 1 : 0
   condition = local.version_mismatched
   description = "Devices's version are mismatched: ${join(":::", local.upper_device_names)}"
-  throw = "Devices with Mismatched Software Version:\n${join("\n", local.device_version_checks_outputs)}\n\n Please upgrade the Device if required or set 'assert' to false then run again."
+  throw = "Devices with Mismatched Software Version:\n${join("\n", local.device_version_checks_outputs)}\n\n Please upgrade the Device if required. If the SW vesrions are compatible, please set 'assert' to false or remove 'Version' from the 'asserts' list; then run again."
 }
 
 output "resources" {
