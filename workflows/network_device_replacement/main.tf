@@ -11,7 +11,7 @@ output "message" {
 }
 
 // Set up the Constellation Network
-module "network_with_filters" {
+module "network" {
   depends_on = [module.network_with_IDs_check]
 
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
@@ -24,12 +24,3 @@ module "network_with_filters" {
   filtered_devices = module.network_with_IDs_check.device_names
 }
 
-module "network"  {
-  depends_on = [module.network_with_IDs_check]
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-  //source = "source = "../../tasks/network"
-  count = length(module.network_with_IDs_check.device_names) > 0 ? 1 : 0
-  network = var.network
-  leaf_bandwidth = var.leaf_bandwidth
-  hub_bandwidth = var.hub_bandwidth
-}
