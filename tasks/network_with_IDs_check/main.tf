@@ -41,7 +41,7 @@ output "devices" {
 }
 
 output "deviceid_checks_outputs" {
-   value = local.devices.deviceid_checks_outputs
+   value = local.deviceid_checks_outputs
 }
 
 output "device_names" {
