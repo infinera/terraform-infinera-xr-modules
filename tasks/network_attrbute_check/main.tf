@@ -1,10 +1,3 @@
-terraform {
-  required_providers {
-    xrcm = {
-      source = "infinera.com/poc/xrcm"
-    }
-  }
-}
 
 module  "get_and_filter_checked_resources"{
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_and_filter_checked_resources"
