@@ -9,12 +9,14 @@ terraform {
 module "network_with_versions_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_versions_check"
   //source = "../../tasks/network_with_versions_check"
+  count = contains(var.asserts, "Version") ? 1 : 0 
 
   assert = contains(var.asserts, "Version")
 }
+ 
 
 output "devices_version_check_message" {
-  value = contains(var.asserts, "Version") ? length(module.network_with_versions_check.device_names) > 0 ? "Devices with mismatched version:\n${join("\n", module.network_with_versions_check.device_names)}\n\nContinue to run the workflow with the assumption that the different device software versions are compatible" : "All devices' version are matched or compatible." : "No Version Check"
+  value = length(module.network_with_versions_check.device_names) > 0 ? "Devices with mismatched version:\n${join("\n", module.network_with_versions_check.device_names)}\n\nContinue to run the workflow with the assumption that the different device software versions are compatible" : "All devices' version are matched or compatible."
 }
 
 module "network_host_mismatch_attribute_check" {
@@ -22,13 +24,16 @@ module "network_host_mismatch_attribute_check" {
   //source = "../../tasks/network_host_mismatch_attribute_check"
 
   count = contains(var.asserts, "HostAttributeMismatched") ? 1 : 0 
+  
   assert = contains(var.asserts, "HostAttributeMismatched")
   condition = "HostAttributeMismatched"
 }
 
 output "host_attribute_mismatch_check_message" {
-  value = contains(var.asserts, "HostAttributeMismatched") ? length(module.network_host_mismatch_attribute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attribute_check.device_names)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeMismatched' to asserts" : " There is no mismatched host attribute" : "No HostAttributeMismatched Check"
+  value = length(module.network_host_mismatch_attribute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attribute_check.device_names)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeMismatched' to asserts" : " There is no mismatched host attribute" 
 }
+
+
 
 // Set up the Constellation Network
 module "network" {
