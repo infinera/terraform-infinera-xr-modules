@@ -18,7 +18,7 @@ locals {
   devices = module.get_devices_with_different_ids.devices
   ids_mismatched = local.devices != null ? length(local.devices) > 0 : false
   deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.devices : "Module:${upper(k)}, DeviceID: ${v.network_deviceid}, tfstateDeviceID: ${v.tfstate_deviceid}"] : []
-  device_names = local.ids_mismatched != null ? [for k,v in local.devices : k ] : []
+  device_names = local.ids_mismatched ? [for k,v in local.devices : k ] : []
   upper_device_names = [for k in local.device_names : upper("${k}")]
 }
 
