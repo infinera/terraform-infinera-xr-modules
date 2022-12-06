@@ -19,7 +19,7 @@ locals {
   resources = module.get_and_filter_checked_resources.resources
   device_names = module.get_and_filter_checked_resources.device_names
   version_mismatched = length(local.device_names) > 0
-  device_version_checks_outputs = local.version_mismatched ? [for k,v in local.resources : "Device:${upper(k)}, Device_Version: ${v.devicevalue}, Intent_Version: ${v.intentvalue}"] : []
+  device_version_checks_outputs = local.version_mismatched ? [for k,v in local.resources : "Device:${upper(k)}, Device_Version: ${v[0].devicevalue}, Intent_Version: ${v[0].intentvalue}"] : []
   upper_device_names = [for k in local.device_names : "${upper(k)}"]
 }
 
