@@ -14,7 +14,7 @@ data "xrcm_devices" "devices" {
 }
 
 locals {
- devices  = {for device in data.xrcm_tfstate_devices_ids.devices_ids.device_ids : device.n => device}
+ devices  = data.xrcm_tfstate_devices_ids.devices_ids.device_ids != null ? {for device in data.xrcm_tfstate_devices_ids.devices_ids.device_ids : device.n => device} : null
 }
 
 locals {
