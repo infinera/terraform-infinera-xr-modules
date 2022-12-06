@@ -40,6 +40,10 @@ output "devices" {
    value = local.devices
 }
 
+output "deviceid_checks_outputs" {
+   value = local.devices.deviceid_checks_outputs
+}
+
 output "device_names" {
   value = local.device_names
 }
