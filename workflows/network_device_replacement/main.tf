@@ -11,7 +11,7 @@ output "message" {
 }
 
 // Set up the Constellation Network
-module "network" {
+module "network" "network1" {
   depends_on = [module.network_with_IDs_check]
 
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
@@ -24,7 +24,7 @@ module "network" {
   filtered_devices = module.network_with_IDs_check.device_names
 }
 
-module "network" {
+module "network" "network2" {
   depends_on = [module.network_with_IDs_check]
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
   //source = "source = "../../tasks/network"
