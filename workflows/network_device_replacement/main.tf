@@ -4,7 +4,6 @@ module  "network_with_IDs_check" {
   //source = "../../tasks/network_with_IDs_check"
 
   assert = var.assert
-  devices_file = var.devices_file
 }
 
 output "message" {
