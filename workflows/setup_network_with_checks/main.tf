@@ -21,11 +21,13 @@ module "network_host_mismatch_attribute_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_host_mismatch_attribute_check"
   //source = "../../tasks/network_host_mismatch_attribute_check"
 
+  count = contains(var.asserts, "HostAttributeMismatched") ? 1 : 0 
   assert = contains(var.asserts, "HostAttributeMismatched")
   condition = "HostAttributeMismatched"
 }
 
 output "host_attribute_mismatch_check_message" {
+  count = contains(var.asserts, "HostAttributeMismatched") ? 1 : 0
   value = length(module.network_host_mismatch_attribute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attribute_check.device_names)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeMismatched' to asserts" : " There is no mismatched host attribute"
 }
 
