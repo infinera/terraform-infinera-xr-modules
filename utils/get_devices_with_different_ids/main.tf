@@ -1,3 +1,10 @@
+terraform {
+  required_providers {
+    xrcm = {
+      source = "infinera.com/poc/xrcm"
+    }
+  }
+}
 
 data "xrcm_tfstate_devices_ids" "devices_ids" {  }
 

@@ -1,4 +1,10 @@
-
+terraform {
+  required_providers {
+    xrcm = {
+      source = "infinera.com/poc/xrcm"
+    }
+  }
+}
 // Set up the Constellation Network
 module "network" {
 

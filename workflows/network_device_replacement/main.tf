@@ -1,3 +1,10 @@
+terraform {
+  required_providers {
+    xrcm = {
+      source = "infinera.com/poc/xrcm"
+    }
+  }
+}
 
 module  "network_with_IDs_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_IDs_check"
