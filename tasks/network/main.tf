@@ -1,10 +1,3 @@
-terraform {
-  required_providers {
-    xrcm = {
-      source = "infinera.com/poc/xrcm"
-    }
-  }
-}
 
 data "xrcm_detaildevices" "onlinehubdevices" {
   names = [for k,v in var.network.setup: k if v.deviceconfig["configuredrole"] == "hub"]
