@@ -22,7 +22,7 @@ module "network_host_mismatch_attribute_check" {
   //source = "../../tasks/network_host_mismatch_attribute_check"
 
   assert = contains(var.asserts, "HostAttributeMismatched")
-  codition = "HostAttributeMismatched"
+  condition = "HostAttributeMismatched"
 }
 
 output "host_attribute_mismatch_check_message" {
