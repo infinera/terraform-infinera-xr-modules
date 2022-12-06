@@ -5,8 +5,4 @@ variable assert {
   default = false
 }
 
-variable "devices_file" {
-  type    = string
-   default = "./tf_devices.json"
-}
 

@@ -6,13 +6,6 @@ terraform {
   }
 }
 
-provider "xrcm" {
-  username = "dev"
-  password = "xrSysArch3"
-  host     = "https://sv-kube-prd.infinera.com:443"
-}
-
-
 module  "get_devices_with_different_ids"{
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_devices_with_different_ids"
   //source = "../../utils/get_devices_with_different_ids"
@@ -22,9 +15,9 @@ module  "get_devices_with_different_ids"{
 }
 
 locals {
-  devices = [] //module.get_devices_with_different_ids.devices
+  devices = module.get_devices_with_different_ids.devices
   ids_mismatched = length(local.devices) > 0
-  deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.devices : "Module:${upper(k)}, SavedID: ${v.saved_deviceid}, DeviceID: ${v.network_deviceid}"] : []
+  deviceid_checks_outputs = local.ids_mismatched ? [for k,v in local.devices : "Module:${upper(k)}, DeviceID: ${v.network_deviceid}, tfstateDeviceID: ${v.tfstate_deviceid}"] : []
   device_names = local.ids_mismatched != null ? [for k,v in local.devices : k ] : []
   upper_device_names = [for k in local.device_names : upper("${k}")]
 }
