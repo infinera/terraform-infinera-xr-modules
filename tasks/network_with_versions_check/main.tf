@@ -41,6 +41,10 @@ output "resources" {
    value = local.resources
 }
 
+output "device_version_checks_outputs" {
+   value = local.device_version_checks_outputs
+}
+
 output "device_names" {
   value = local.device_names
 }

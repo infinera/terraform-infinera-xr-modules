@@ -42,6 +42,10 @@ output "resources" {
    value = local.resources
 }
 
+output "host_control_checks_outputs" {
+   value = local.host_control_checks_outputs
+}
+
 output "device_names" {
   value = local.device_names
 }
