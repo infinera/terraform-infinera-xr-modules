@@ -24,7 +24,7 @@ locals {
 }
 
 output "message" {
-  value = local.host_control && !var.assert ? "Not Assert. Devices with <<${var.condition}>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nAction: Continue to run" : ""
+  value = local.host_control && !var.assert ? "Not Assert. Devices with <<HostAttributeNMismatched>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nAction: Continue to run" : ""
 }
 
 // check module with mismatched host attributes
@@ -33,8 +33,8 @@ data "xrcm_check" "check_mismatched_host_attribute" {
 
   count = var.assert ? 1 : 0
   condition = local.host_control
-  description = "Devices with <<${var.condition}>> attributes: ${join(":::", local.upper_device_names)}"
-  throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no conflict>> condition; please set 'assert' to false or remove the <<${var.condition}>> from 'asserts' list. "
+  description = "Devices with <<HostAttributeNMismatched>> attributes: ${join(":::", local.upper_device_names)}"
+  throw = "Devices with <<HostAttributeNMismatched>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no conflict>> condition; please set 'assert' to false or remove the <<HostAttributeNMismatched>> from 'asserts' list. "
 }
 
 output "resources" {
