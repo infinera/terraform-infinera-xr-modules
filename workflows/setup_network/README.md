@@ -1,43 +1,27 @@
-# Network Device Replacement Module
-This module shall handle the situation when one or more devices in a constellation network are replaced.
+# Terraform Set Up Network Module
+This module shall create a constellation network without any check or filtered devices
 
 ## How to
 The procedure to replace one device by another device shall involve two steps
-  1. Go to the **network_device_replacement** directory or its clone directory
+  1. Go to the **setup_network** directory or its clone directory
      1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
   2. Specify the input variables by updating the **AAA.auto.tfvars** input file. 
      1. The network intent
      2. The bandwidth intent
      3. The sevice intent
-  3. Run the replacement procedure. ***This requires two execution steps***
-     1. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will update related resources and removed and any dangling resources on the devices which have same labels but different IDs. The TF state device IDs will be used to compare against the current device IDs in the network.
-     2. Execute again *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will create new resources in the replacing devices and update related resources in the affected devices. 
+  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will create the constellation network.
 
-*main.tf* in **network_device_replacement** directory. Note: **Run 'terraform apply' Twice** for device replacement.
+*main.tf* in **setup_network** directory
 ```
-  module  "network_with_IDs_check" {
-    source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_IDs_check"
-    //source = "../../tasks/network_with_IDs_check"
-
-    assert = var.assert
-  }
-
-  output "message" {
-    value = length(module.network_with_IDs_check.device_names) > 0 ? "Devices with ID(s) Mismatched:\n${join("\n", module.network_with_IDs_check.deviceid_checks_outputs)}\n\nThe mismatched devices shall be filtered out from the hub and leaf devices. \nThis shall clean up the state and remove all dangling resources in these ID mismatched devices" : " There is no ID mismatched devices."
-  }
-
-  // Set up the Constellation Network
+  // network module shall provision the constellation network without any checks
   module "network" {
-    depends_on = [module.network_with_IDs_check]
-
     source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
     //source = "source = "../../tasks/network"
 
-    network = var.network
-    leaf_bandwidth = var.leaf_bandwidth
-    hub_bandwidth = var.hub_bandwidth
-    client-2-dscg     = var.client-2-dscg
-    filtered_devices = module.network_with_IDs_check.device_names // specify the replaced device
+    network = var.network                       // specify the intent network
+    leaf_bandwidth = var.leaf_bandwidth         // specify the intent leaf bandwidth
+    hub_bandwidth = var.hub_bandwidth           // specify the intent Hub bandwidth
+    client-2-dscg     = var.client-2-dscg       // specify the intent service (AC and/or LC)
 }
 ```
 ## Description
@@ -59,14 +43,7 @@ Below is the run sequence
    2. Provision Leaf Device AC
    3. Provision Hub Device LC
    4. Provision Leaf Device LC
-## inputs
-### Asserts : If assert is true, the run will stop when there is a device which its network ID is different from the TF State ID
-```
-variable assert { 
-  type = bool
-  default = true 
-}
-```
+## Inputs
 ### Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
 ```
 variable network {

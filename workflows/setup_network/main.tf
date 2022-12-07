@@ -7,7 +7,6 @@ terraform {
 }
 // Set up the Constellation Network
 module "network" {
-
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
   //source = "../../tasks/network"
 

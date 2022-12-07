@@ -9,7 +9,6 @@ terraform {
 module "network_with_versions_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_versions_check"
   //source = "../../tasks/network_with_versions_check"
-  //count = contains(var.asserts, "Version") ? 1 : 0 
 
   assert = contains(var.asserts, "Version")
 }
@@ -17,8 +16,6 @@ module "network_with_versions_check" {
 module "network_host_mismatch_attribute_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_host_mismatch_attribute_check"
   //source = "../../tasks/network_host_mismatch_attribute_check"
-
-  //count = contains(var.asserts, "HostAttributeNMismatched") ? 1 : 0 
   
   assert = contains(var.asserts, "HostAttributeNMismatched")
   condition = "HostAttributeNMismatched"
