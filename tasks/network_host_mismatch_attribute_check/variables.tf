@@ -2,12 +2,12 @@
 // Otherwise continue to run.
 variable assert {
   type = bool
-  default = true
+  default = false
 }
 
 variable condition {
   type = string
-  default = "HostAttribute"
+  default = "HostAttributeNMismatched"
   #  Support Values = HostAttribute, HostAttributeNMismatched, HostAttributeNMatched, NonHostAttribute, NonHostAttributeNMismatched, NonHostAttributeNMatched,  Matched, Mismatched
 }
 

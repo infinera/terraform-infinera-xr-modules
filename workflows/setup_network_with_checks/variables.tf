@@ -2,6 +2,7 @@
 // Otherwise continue to run.
 variable asserts {
   type = list(string)
-  default = ["Version", "HostAttributeMismatched"]
+  default = ["HostAttributeNMismatched"]
+   #  Support Values = HostAttribute, HostAttributeNMismatched, HostAttributeNMatched, NonHostAttribute, NonHostAttributeNMismatched, NonHostAttributeNMatched,  Matched, Mismatched
 }
 
