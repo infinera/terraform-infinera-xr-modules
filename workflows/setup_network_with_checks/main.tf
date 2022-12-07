@@ -18,7 +18,6 @@ module "network_host_mismatch_attribute_check" {
   //source = "../../tasks/network_host_mismatch_attribute_check"
   
   assert = contains(var.asserts, "HostAttributeNMismatched")
-  condition = "HostAttributeNMismatched"
 }
 
 // Set up the Constellation Network
@@ -38,7 +37,7 @@ output "devices_version_check_message" {
 }
 
 output "host_attribute_mismatch_check_message" {
-  value = length(module.network_host_mismatch_attribute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attribute_check.host_control_checks_outputs)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeNMismatched' to asserts" : " There is no mismatched host attribute" 
+  value = length(module.network_host_mismatch_attribute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attribute_check.mismatched_host_attribute_check_outputs)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeNMismatched' to asserts" : " There is no mismatched host attribute" 
 }
 
 

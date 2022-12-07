@@ -4,10 +4,3 @@ variable assert {
   type = bool
   default = false
 }
-
-variable condition {
-  type = string
-  default = "HostAttributeNMismatched"
-  #  Support Values = HostAttribute, HostAttributeNMismatched, HostAttributeNMatched, NonHostAttribute, NonHostAttributeNMismatched, NonHostAttributeNMatched,  Matched, Mismatched
-}
-

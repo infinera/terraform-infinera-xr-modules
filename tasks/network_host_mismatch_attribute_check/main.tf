@@ -12,38 +12,37 @@ module  "get_and_filter_checked_resources"{
 
   network = var.network
   resource_type = "Ethernet"
-  filter = var.condition
+  filter = "HostAttributeNMismatched"
 }
 
 locals {
   resources = module.get_and_filter_checked_resources.resources
   device_names = module.get_and_filter_checked_resources.device_names
   host_control = length(local.device_names) > 0
-  host_control_checks_outputs = local.host_control ? [for k,v in local.resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
+  mismatched_host_attribute_check_outputs = local.host_control ? [for k,v in local.resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
   upper_device_names = [for k in local.device_names : "${upper(k)}"]
 }
 
 output "message" {
-  value = local.host_control && !var.assert ? "Not Assert. Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nAction: Continue to run" : ""
+  value = local.host_control && !var.assert ? "Not Assert. Devices with <<${var.condition}>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nAction: Continue to run" : ""
 }
 
-// check module with mismatched version
-data "xrcm_check" "check_host_control" {
+// check module with mismatched host attributes
+data "xrcm_check" "check_mismatched_host_attribute" {
   depends_on = [module.get_and_filter_checked_resources] 
 
   count = var.assert ? 1 : 0
   condition = local.host_control
   description = "Devices with <<${var.condition}>> attributes: ${join(":::", local.upper_device_names)}"
-  throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.host_control_checks_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no conflict>> condition; please set 'assert' to false or remove the <<${var.condition}>> from 'asserts' list. "
+  throw = "Devices with <<${var.condition}>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no conflict>> condition; please set 'assert' to false or remove the <<${var.condition}>> from 'asserts' list. "
 }
-
 
 output "resources" {
    value = local.resources
 }
 
-output "host_control_checks_outputs" {
-   value = local.host_control_checks_outputs
+output "mismatched_host_attribute_check_outputs" {
+   value = local.mismatched_host_attribute_check_outputs
 }
 
 output "device_names" {
