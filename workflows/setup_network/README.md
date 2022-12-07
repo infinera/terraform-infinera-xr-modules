@@ -1,5 +1,5 @@
-# Terraform Set Up Network Module
-This module shall create a constellation network without any check or filtered devices
+# Workflow: Terraform Set Up Network Module
+This workflow shall create a constellation network without any check or filtered devices
 
 ## How to
 The procedure to replace one device by another device shall involve two steps
@@ -9,7 +9,7 @@ The procedure to replace one device by another device shall involve two steps
      1. The network intent
      2. The bandwidth intent
      3. The sevice intent
-  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will create the constellation network.
+  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. 
 
 *main.tf* in **setup_network** directory
 ```

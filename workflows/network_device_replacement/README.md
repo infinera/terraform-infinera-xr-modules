@@ -1,5 +1,5 @@
-# Network Device Replacement Module
-This module shall handle the situation when one or more devices in a constellation network are replaced.
+# Workflow: Network Device Replacement Module
+This workflow shall handle the situation when one or more devices in a constellation network are replaced.
 
 ## How to
 The procedure to replace one device by another device shall involve two steps
@@ -11,7 +11,7 @@ The procedure to replace one device by another device shall involve two steps
      3. The sevice intent
   3. Run the replacement procedure. ***This requires two execution steps***
      1. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will update related resources and removed and any dangling resources on the devices which have same labels but different IDs. The TF state device IDs will be used to compare against the current device IDs in the network.
-     2. Execute again *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will create new resources in the replacing devices and update related resources in the affected devices. 
+     2. Execute again *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*.
 
 *main.tf* in **network_device_replacement** directory. Note: **Run 'terraform apply' Twice** for device replacement.
 ```

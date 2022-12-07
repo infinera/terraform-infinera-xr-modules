@@ -1,13 +1,13 @@
-# Network Attrbute Check Module
-This module will check the intent device resources' attribute against the network device attributes
+# Task: Network Attrbute Check Module
+This task will check the intent device resources' attribute against the network device attributes
 ## How to Run 
-  1. Go to the **network_attrbute_check** directory or its clone directory
+  1. Go to the **network_attribute_check** directory or its clone directory
      1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
   2. Specify the input variables by updating the *AAA.auto.tfvars* input file. 
      1. The network intent
-  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will configure the constellation network with the specified asserted conditions
+  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. 
 
-*main.tf* in **network_attrbute_check** directory
+*main.tf* in **network_attribute_check** directory
 ```
 module  "get_and_filter_checked_resources"{
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_and_filter_checked_resources"
@@ -54,6 +54,13 @@ Below is the run sequence
 ### check the intent device resources' attribute against the network device attributes
 
 ## Inputs
+### Asserts : If assert is true, the run will stop when there is a device attribute matches the condition
+```
+variable assert { 
+  type = bool
+  default = true 
+}
+```
 ### Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
 ```
 variable network {
@@ -79,8 +86,3 @@ network = {
     }
   }
 ```
-
-
-
-
-

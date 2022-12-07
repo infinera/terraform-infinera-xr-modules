@@ -1,5 +1,5 @@
-# Setup Network With Checks Module
-This module will setup the constellation network based on the specified configuration with the default Vesrion and Mismatched Host Attribute Checks
+# Workflow: Setup Network With Checks Module
+This workflow will setup the constellation network based on the specified configuration with the default Vesrion and Mismatched Host Attribute Checks
 ## How to Run 
   1. Go to the **setup_network_with_checks** directory or its clone directory
      1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
@@ -8,7 +8,7 @@ This module will setup the constellation network based on the specified configur
      2. The network intent
      3. The bandwidth intent
      4. The sevice intent
-  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will configure the constellation network with the specified asserted conditions
+  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. 
 
 *main.tf* in **setup_network_with_checks** directory
 ```
