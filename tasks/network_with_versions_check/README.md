@@ -52,6 +52,7 @@ output "device_names" {
 }
 
 ```
+## Usage: [Network Setup With Version Check Workflow](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/setup_network_with_checks)
 ## Description
 Below is the run sequence
 ### check the intent device resources' attribute against the network device attributes

@@ -49,6 +49,7 @@ output "device_names" {
 }
 
 ```
+## Usage
 ## Description
 Below is the run sequence
 ### check the intent device resources' attribute against the network device attributes

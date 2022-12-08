@@ -56,9 +56,13 @@ module "service-setup" {
   module_carriers = local.module_carriers
   module_clients = local.module_clients
 }
-
 ```
-## Usage: Use Case - [Network Cleanup Device](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_cleanup_device)
+## Usage: 
+1. [Network Cleanup Device Use Case](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_cleanup_device)
+2. [Network Device Replacement Workflow](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/network_device_replacement)
+3. [Network Setup Workflow](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/setup_network)
+4. [Network Setup With Checks](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/setup_network_with_checks)
+
 ## Description
 Below is the run sequence
 ### Set up constellation configuration

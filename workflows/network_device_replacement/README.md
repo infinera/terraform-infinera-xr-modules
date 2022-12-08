@@ -40,7 +40,7 @@ The procedure are defined below
     filtered_devices = module.network_with_IDs_check.device_names // specify the replaced device
 }
 ```
-## Usage: Use Case - [Network Replacement](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_replacement)
+## Usage: [Network Replacement Use Case](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_replacement)
 
 ## Description
 Below is the run sequence

@@ -47,7 +47,7 @@ output "host_attribute_mismatch_check_message" {
   value = length(module.network_host_mismatch_attribute_check.device_names) > 0 ? "Devices with mismatched Host attribute(s):\n${join("\n", module.network_host_mismatch_attribute_check.host_control_checks_outputs)}\n\nMismatched Host attributes can not be updated by IPM.\nTo continue the run for other devices which has no change on Host attributes; please add 'HostAttributeNMismatched' to asserts" : " There is no mismatched host attribute" 
 }
 ```
-## Usage: Use Case - [Setup Network](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_setup)
+## Usage: [Setup Network Use Case](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_setup)
 ## Description
 Below is the run sequence
 ### check for device with version mismatched
