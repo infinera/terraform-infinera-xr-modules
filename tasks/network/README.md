@@ -58,6 +58,7 @@ module "service-setup" {
 }
 
 ```
+## Usage: Use Case - [Network Cleanup Device](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_cleanup_device)
 ## Description
 Below is the run sequence
 ### Set up constellation configuration

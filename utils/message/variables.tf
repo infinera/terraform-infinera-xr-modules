@@ -1,14 +1,9 @@
-variable codition {
-  type = bool
-	default = false
-}
-
 variable title {
   type = string
 	default = "Title"
 }
 
-variable message {
+variable content {
   type = string
 	default = "Message"
 }

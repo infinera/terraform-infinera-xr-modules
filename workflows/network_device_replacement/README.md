@@ -2,7 +2,7 @@
 This workflow shall handle the situation when one or more devices in a constellation network are replaced.
 
 ## How to
-The procedure to replace one device by another device shall involve two steps
+The procedure are defined below
   1. Go to the **network_device_replacement** directory or its clone directory
      1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
   2. Specify the input variables by updating the **AAA.auto.tfvars** input file. 
@@ -40,6 +40,8 @@ The procedure to replace one device by another device shall involve two steps
     filtered_devices = module.network_with_IDs_check.device_names // specify the replaced device
 }
 ```
+## Usage: Use Case - [Network Replacement](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_replacement)
+
 ## Description
 Below is the run sequence
 ### Set up constellation configuration

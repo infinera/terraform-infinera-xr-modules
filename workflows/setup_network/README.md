@@ -24,6 +24,7 @@ The procedure to replace one device by another device shall involve two steps
     client-2-dscg     = var.client-2-dscg       // specify the intent service (AC and/or LC)
 }
 ```
+## Usage: Use Case - [Network Replacement](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_replacement)
 ## Description
 Below is the run sequence
 ### Set up constellation configuration

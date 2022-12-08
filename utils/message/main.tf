@@ -7,9 +7,9 @@ terraform {
 }
 
 locals {
-  message = "${upper(var.title)}:\n ${var.message}"
+  message = "${upper(var.title)}:\n ${var.content}"
 }
 
-output "show_message" {
+output "message" {
   value = var ? local.message : ""
 }
