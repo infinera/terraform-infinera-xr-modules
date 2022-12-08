@@ -3,7 +3,7 @@ variable "title" {
   default = ""
 }
 
-variable "message" {
+variable "content" {
   type = string
   default = ""
 }

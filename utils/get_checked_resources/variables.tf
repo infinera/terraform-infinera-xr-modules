@@ -1,4 +1,4 @@
-// Map of device names to map of device config, clients and lines
+// resource type
 variable resource_type {
   type = string
   default = "Carrier"

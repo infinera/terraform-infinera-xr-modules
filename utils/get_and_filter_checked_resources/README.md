@@ -1,38 +1,82 @@
-# Util: get_and_filter_checked_resources
+# Get and Filter Checked Resources
 
-## How to Run 
-  1. Go to the **get_and_filter_checked_resources** directory or its clone directory
-     1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
-  2. Specify the input variables by updating the *AAA.auto.tfvars* input file. 
-     1. The network intent
-  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. 
-
-*main.tf* in **get_and_filter_checked_resources** directory
-```
-locals {
-  queries = length(var.queries) > 0  ? [for query in var.queries: query] : var.resource_type == "Ethernet" ? [ for k,v in var.network.setup: { n = k, resourcetype = var.resource_type, resources = [ for client in v["deviceclients"]: {grandparentid = "", parentid = "", resourceid = client.clientid, attributevalues = [{ attribute = "portSpeed", intentvalue = client.portspeed, controlattribute = "portSpeedControl"}]} ] } ] : var.resource_type == "Carrier" ? [ for k,v in var.network.setup: { n = k, resourcetype = "Carrier", resources = [ for carrier in v["devicecarriers"]: {grandparentid = "", parentid = carrier.lineptpid, resourceid = carrier.carrierid, attributevalues = [{ attribute = "modulation", intentvalue = carrier.modulation, controlattribute = "modulationControl"}]} ] } ] : var.resource_type == "Config" ? [ for k,v in var.network.setup: { n = k, resourcetype = "Config", resources = [{grandparentid = "", parentid = "", resourceid = k, attributevalues = [{ attribute = "trafficMode", intentvalue = v["deviceconfig"].trafficmode, controlattribute = "trafficModeControl"}]} ] } ] : var.resource_type == "Device" ? [ for k,v in var.network.setup: { n = k, resourcetype = "Device", resources = [{grandparentid = "", parentid = "", resourceid = k, attributevalues = [{attribute = "sv", intentvalue = v["device"].sv}]} ] } ]: []
-}
-
-data "xrcm_check_resources" "resources" {
-  queries =  local.queries
-}
-
-module "filter_checked_resources" {
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/filter_checked_resources"
-  //source = "../filter_checked_resources"
-  filter = var.filter
-  devices_resources = data.xrcm_check_resources.resources.queries
-}
-
-output "resources" {
-  value = module.filter_checked_resources.resources
-}
-
-output device_names {
-  value = module.filter_checked_resources.device_names
-}
-```
-## Usage: Utils [get_and_filter_checked_resources](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/utils/get_and_filter_checked_resources)
 ## Description
+Get the devices' resources that meet the checked condition. The checked resources have the attributes which has been compared with the intent and Host control.  
+I.E. If the Check Condition is NonHostAttribute; the device attribute will meet this condition if it is not owned (controlled) by the Host.
 
 ## Inputs
+1. Filter: The filter(condition) to apply to the specified List of devices' checked resources. 
+```
+variable filter {
+  type = string
+  default = "Mismatched"
+  #  Support Values = HostAttribute, HostAttributeNMismatched, HostAttributeNMatched, NonHostAttribute, NonHostAttributeNMismatched, NonHostAttributeNMatched,  Matched, Mismatched
+}
+```
+2. Devices'Resources: List of devices' checked resources. **Only need to specify *Devices'Resources* if the *Network* is not specified**.
+```
+variable devices_resources {
+  type =  list(object({ n= string, resourcetype = string, deviceid = optional(string)
+                        resources = list(object({resourceid = string, attributevalues = string, controlattribute = optional(string), parentid= optional(string), grandparentid = optional(string), attributevalues = optional(list(object({attribute=string, intentvalue= string, devicevalue=optional(string), controlattribute= optional(string),isvaluematch=optional(bool), attributecontrolbyhost = optional(bool)})))})) }))
+  default = []
+}
+```
+3. Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers. **Only need to specify *Network* if the *Devices'Resources* is not specified**.
+```
+variable network {
+  type = object({
+    configs = object({ portspeed = optional(string), trafficmode = optional(string), modulation = optional(string) })
+    setup = map(object({ device  = optional(object( {di = optional(string), sv = optional(string)})),
+    deviceconfig  = optional(object( {fiberconnectionmode = optional(string), tcmode = optional(bool), configuredrole = optional(string), trafficmode = optional(string)})),
+    deviceclients = optional(list(object({clientid = string, portspeed = optional(string)}))),
+    devicecarriers= optional(list(object({lineptpid = string, carrierid = string, modulation = optional(string), clientportmode = optional(string),constellationfrequency = optional(number)})))
+    }))
+  })
+}
+
+Example:
+network = {
+  configs = { portspeed = "", trafficmode = "L1Mode", modulation = "" }
+  setup = {
+    xr-regA_H1-Hub = {
+      device = { di = "76e073d6-4570-4111-4853-3bd52878dfa2", sv = "1.00"}
+      deviceconfig = { configuredrole = "hub", trafficmode ="L1Mode"}
+      deviceclients = [{ clientid = "1", portspeed="200"}, { clientid = "2",portspeed="200"}]
+      devicecarriers = [{ lineptpid = "1", carrierid = "1", modulation ="16QAM"}] 
+    }
+  }
+```
+## Outputs
+1. Devices Resources: *resources*: The devices'resources which meet the condition. It is a map of device name to the array of its matched resources.
+```
+   resources = object ({  n= string, resourcetype = string, deviceid = optional(string)
+              resources = list(object({resourceid = string, attributevalues = string, controlattribute = optional(string), parentid= optional(string), 
+              grandparentid = optional(string), attributevalues = optional(list(object({attribute=string, intentvalue= string, devicevalue=optional(string),
+              controlattribute= optional(string),isvaluematch=optional(bool), attributecontrolbyhost = optional(bool)}
+```
+2. Device_Names *device_names*: The list of device names which has attributes met the condition 
+```
+  device_names = list(string)
+```
+## Usage:
+```
+module  "get_and_filter_checked_resources"{
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_and_filter_checked_resources"
+
+  network = var.network
+  resource_type = "Device"
+  filter = "Mismatched"
+}
+
+output "filter_checked_resources" {
+  value = module.get_and_filter_checked_resources.resources
+}
+output "filter_checked_resources_device_names" {
+  value = module.get_and_filter_checked_resources.device_names
+}
+```
+## Usage References: 
+* [Check Resource](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/preconditions/check_resource)
+* [Network Attribute Check](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/tasks/network_attribute_check)
+* [Network Mismatched Host Attribute Check](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/tasks/network_host_mismatch_attribute_check)
+* [Network With Version Check](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/tasks/network_with_versions_check
