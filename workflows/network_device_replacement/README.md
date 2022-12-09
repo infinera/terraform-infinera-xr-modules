@@ -1,75 +1,27 @@
-# Workflow: Network Device Replacement Module
-This workflow shall handle the situation when one or more devices in a constellation network are replaced.
-
-## How to
-The procedure are defined below
-  1. Go to the **network_device_replacement** directory or its clone directory
-     1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
-  2. Specify the input variables by updating the **AAA.auto.tfvars** input file. 
-     1. The network intent
-     2. The bandwidth intent
-     3. The sevice intent
-  3. Run the replacement procedure. ***This requires two execution steps***
-     1. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. This will update related resources and removed and any dangling resources on the devices which have same labels but different IDs. The TF state device IDs will be used to compare against the current device IDs in the network.
-     2. Execute again *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*.
-
-*main.tf* in **network_device_replacement** directory. Note: **Run 'terraform apply' Twice** for device replacement.
-```
-  module  "network_with_IDs_check" {
-    source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_IDs_check"
-    //source = "../../tasks/network_with_IDs_check"
-
-    assert = var.assert
-  }
-
-  output "message" {
-    value = length(module.network_with_IDs_check.device_names) > 0 ? "Devices with ID(s) Mismatched:\n${join("\n", module.network_with_IDs_check.deviceid_checks_outputs)}\n\nThe mismatched devices shall be filtered out from the hub and leaf devices. \nThis shall clean up the state and remove all dangling resources in these ID mismatched devices" : " There is no ID mismatched devices."
-  }
-
-  // Set up the Constellation Network
-  module "network" {
-    depends_on = [module.network_with_IDs_check]
-
-    source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-    //source = "source = "../../tasks/network"
-
-    network = var.network
-    leaf_bandwidth = var.leaf_bandwidth
-    hub_bandwidth = var.hub_bandwidth
-    client-2-dscg     = var.client-2-dscg
-    filtered_devices = module.network_with_IDs_check.device_names // specify the replaced device
-}
-```
-## Usage: [Network Replacement Use Case](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_replacement)
+# Workflow: Network Device Replacement
 
 ## Description
-Below is the run sequence
-### Set up constellation configuration
-1. Configure Network
-   1. Configure Hub Device Config
-   2. Configure Leaf Device Config
-   3. Configure Hub Device Carrier
-   4. Configure Leaf Device Carrier
-2. Configure Bandwidth
-   1. Configure Hub Device DSC
-   2. Configure Leaf Device DSC
-   3. Configure Hub Device DSCG
-   4. Configure Leaf Device DSCG
-   5. Configure Leaf Device DSCG-Hub
-3. Provision Service
-   1. Provision Hub Device AC
-   2. Provision Leaf Device AC
-   3. Provision Hub Device LC
-   4. Provision Leaf Device LC
+This workflow shall provision a constellation network as shown below
+  1. Find the devices with the same name but different network ID and TF state ID
+     1. Get the devices and their IDs in the current TF state. The TF state can be local or remote (Remote TF state shall be supported in later release)
+     2. Get the Devices' propery from the network. The device property has the network device ID
+     3. Compare the devices and their IDs in [1] and [2] to derive the different IDs device list
+  2. Provision the network with the filtered devices. The filtered devices are the devices with the same name but different network ID and TF state ID found in step 1. During the *terraform apply*,
+     1. The filtered devices shall be removed from the intent; Hence their resources are deleted during the run. In addition, all other related resources shall be updated as needed.
+     2. The constellation is created or updated for all the specified devices not in the filtered device list.
+   
+> *** Notes *** However to complete the Device Replacement with all populated resources, this workflow must be run twice. 
+     1. First *terraform apply* to clean up the resources for the filtered devices (with the same name but different network ID and TF state ID)
+     2. Second *terraform apply* to create all resources for the filtered devices in step 1 but they do not have diffent IDs after the first *terraform apply* (Device's network ID and TF state ID are the same)
 ## inputs
-### Asserts : If assert is true, the run will stop when there is a device which its network ID is different from the TF State ID
+1. Asserts : If assert is true, the run will stop when there is a device which the same name but different IDs. This is the cases of device replacement or swapping in a constellation network.
 ```
 variable assert { 
   type = bool
   default = true 
 }
 ```
-### Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
+2. Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
 ```
 variable network {
   type = object({
@@ -94,37 +46,37 @@ network = {
     }
   }
 ```
-### Bandwidth: Specify both Hub and Leaf Bandwidths
-#### Hub Bandwidth: Defines the bandwidth to provisioned between Hub and each leaf. For each leaf, define the Hub DSC ids to be assigned to the BW, and the Hub DSCG id and Leaf DSCG id to be used to create the DSCG. Creates Hub DSCGs.
-```
-variable "hub_bandwidth" {
-  type = map(map(object({ hubdscgid = optional(string), leafdscgid = optional(string), hubdscidlist = optional(list(string)), leafdscidlist = optional(list(string)), direction = optional(string) })))
+3. Bandwidth: Specify both Hub and Leaf Bandwidths
+  - Hub Bandwidth: Defines the bandwidth to provisioned between Hub and each leaf. For each leaf, define the Hub DSC ids to be assigned to the BW, and the Hub DSCG id and Leaf DSCG id to be used to create the DSCG. Creates Hub DSCGs.
+    ```
+    variable "hub_bandwidth" {
+      type = map(map(object({ hubdscgid = optional(string), leafdscgid = optional(string), hubdscidlist = optional(list(string)), leafdscidlist = optional(list(string)), direction = optional(string) })))
 
-Example:
-hub_bandwidth = {
-  xr-regA_H1-Hub = { // For each DSCG create a entry, ds = hubdscidlist, us = leafdscidlist. 
-  // for each dsc specified in hubdscidlist THD tx, rx enabled
-  xr-regA_H1-Hub-BW5173ds = { hubdscgid = "1", leafdscgid = "1", hubdscidlist = ["5", "1", "7", "3"], leafdscidlist = ["1", "2", "3", "4"], direction = "ds" }
-  xr-regA_H1-Hub-BW2468ds = { hubdscgid = "2", leafdscgid = "1", hubdscidlist = ["2", "4", "6", "8"], leafdscidlist = ["1", "2", "3", "4"], direction = "ds" },
-  },
-}
-```
-### Leaf bandwidth: Defines the bandwidth to provisioned between Hub and each leaf. For each leaf, define the Hub DSC ids to be assigned to the BW, and the Hub DSCG id and Leaf DSCG id to be used to create the DSCG. Creates Leaf DSCGs.
-```
-variable "leaf_bandwidth" {
-  type = map(map(object({ hubdscgid = string, leafdscgid = string, hubdscidlist = list(string), leafdscidlist = list(string), direction = string
-  // direction possible values: bidi, us, ds
-  })))
-}
+    Example:
+    hub_bandwidth = {
+      xr-regA_H1-Hub = { // For each DSCG create a entry, ds = hubdscidlist, us = leafdscidlist. 
+      // for each dsc specified in hubdscidlist THD tx, rx enabled
+      xr-regA_H1-Hub-BW5173ds = { hubdscgid = "1", leafdscgid = "1", hubdscidlist = ["5", "1", "7", "3"], leafdscidlist = ["1", "2", "3", "4"], direction = "ds" }
+      xr-regA_H1-Hub-BW2468ds = { hubdscgid = "2", leafdscgid = "1", hubdscidlist = ["2", "4", "6", "8"], leafdscidlist = ["1", "2", "3", "4"], direction = "ds" },
+      },
+    }
+    ```
+  - Leaf bandwidth: Defines the bandwidth to provisioned between Hub and each leaf. For each leaf, define the Hub DSC ids to be assigned to the BW, and the Hub DSCG id and Leaf DSCG id to be used to create the DSCG. Creates Leaf DSCGs.
+    ```
+    variable "leaf_bandwidth" {
+      type = map(map(object({ hubdscgid = string, leafdscgid = string, hubdscidlist = list(string), leafdscidlist = list(string), direction = string
+      // direction possible values: bidi, us, ds
+      })))
+    }
 
-Example
-leaf_bandwidth = {
-  xr-regA_H1-L1 = {       
-    xr-regA_H1-Hub-BW5173ds = { hubdscgid = "3", leafdscgid = "2", hubdscidlist = ["5"], leafdscidlist = ["1"], direction = "us" }
-  }
-}
-```
-### Services: Defines the local connections for each node in the network. Each conection includes the Cliend id and DSCG id
+    Example
+    leaf_bandwidth = {
+      xr-regA_H1-L1 = {       
+        xr-regA_H1-Hub-BW5173ds = { hubdscgid = "3", leafdscgid = "2", hubdscidlist = ["5"], leafdscidlist = ["1"], direction = "us" }
+      }
+    }
+    ```
+4. Services: Defines the local connections for each node in the network. Each conection includes the Cliend id and DSCG id
 ```
 variable "client-2-dscg" {
   type = map(map(object({ clientindex = optional(number) // index to module_clients list
@@ -163,3 +115,26 @@ client-2-dscg = {
   }
 }
 ```
+### Outputs: Network is cleanup after first run and create after second run
+1. Message: display the different IDs devices
+```
+ message = string
+```
+## Usage
+```
+module "network_device_replacement" {
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//workflows/network_device_replacement"
+  
+  assert = var.assert
+  network = var.network
+  leaf_bandwidth = var.leaf_bandwidth
+  hub_bandwidth = var.hub_bandwidth
+  client-2-dscg     = var.client-2-dscg
+}
+
+output "message" {
+  value = module.network_device_replacement.message
+}
+```
+## Usage Reference
+* [Network Replacement Use Case](https://github.com/infinera/terraform-xr-network/tree/main/use_cases/network_replacement)

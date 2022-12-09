@@ -1,72 +1,15 @@
-# Task: Network Attrbute Check
-This task will check for any mismatched host attribute.
-## How to Run 
-  1. Go to the **network_host_mismatch_attribute_check** directory or its clone directory
-     1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
-  2. Specify the input variables by updating the *AAA.auto.tfvars* input file. 
-     1. The network intent
-  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*.
-
-*main.tf* in **network_host_mismatch_attribute_check** directory
-```
-module  "get_and_filter_checked_resources"{
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_and_filter_checked_resources"
-  //source = "../../utils/get_and_filter_checked_resources"
-
-  network = var.network
-  resource_type = "Ethernet"
-  filter = "HostAttributeNMismatched"
-}
-
-locals {
-  resources = module.get_and_filter_checked_resources.resources
-  device_names = module.get_and_filter_checked_resources.device_names
-  host_control = length(local.device_names) > 0
-  mismatched_host_attribute_check_outputs = local.host_control ? [for k,v in local.resources : "Module:${upper(k)}, resources: ${jsonencode(v)}"] : []
-  upper_device_names = [for k in local.device_names : "${upper(k)}"]
-}
-
-output "message" {
-  value = local.host_control && !var.assert ? "Not Assert. Devices with <<HostAttributeNMismatched>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nAction: Continue to run" : ""
-}
-
-// check module with mismatched host attributes
-data "xrcm_check" "check_mismatched_host_attribute" {
-  depends_on = [module.get_and_filter_checked_resources] 
-
-  count = var.assert ? 1 : 0
-  condition = local.host_control
-  description = "Devices with <<HostAttributeNMismatched>> attributes: ${join(":::", local.upper_device_names)}"
-  throw = "Devices with <<HostAttributeNMismatched>> attributes:\n${join("\n", local.mismatched_host_attribute_check_outputs)}\n\nHost attributes can not be updated by IPM.\nTo continue the run for other devices which has no conflict>> condition; please set 'assert' to false or remove the <<HostAttributeNMismatched>> from 'asserts' list. "
-}
-
-output "resources" {
-   value = local.resources
-}
-
-output "mismatched_host_attribute_check_outputs" {
-   value = local.mismatched_host_attribute_check_outputs
-}
-
-output "device_names" {
-  value = local.device_names
-}
-
-```
-## Usage: [Network Setup With Checks Workflow](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/setup_network_with_checks)
+# Network Mismatched Host Attributes Check
 ## Description
-Below is the run sequence
-### check the intent device resources' attribute against the network device attributes
-
+This task will check for any mismatched host attribute and stop the run if teh *assert* is true
 ## Inputs
-### Asserts : If assert is true, the run will stop when there is a mismatched host attribute
+1. Asserts : If assert is true, the run will stop when there is a mismatched host attribute
 ```
 variable assert { 
   type = bool
   default = true 
 }
 ```
-### Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
+2. Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
 ```
 variable network {
   type = object({
@@ -91,4 +34,43 @@ network = {
     }
   }
 ```
+## Outputs
+1. Device Names: List of the device names which has mismatched host attributes
+```
+   device_names = list(string)
+```
+2. Devices Resources: *resources*: The devices'resources which meet the Mismatched Host Attribute condition. It is a map of device name to the array of its matched resources.
+```
+   resources = map(object ({  n= string, resourcetype = string, deviceid = optional(string)
+              resources = list(object({resourceid = string, attributevalues = string, controlattribute = optional(string), parentid= optional(string), 
+              grandparentid = optional(string), attributevalues = optional(list(object({attribute=string, intentvalue= string, devicevalue=optional(string),
+              controlattribute= optional(string),isvaluematch=optional(bool), attributecontrolbyhost = optional(bool)}))
+```
+3. Mismatched Host Attribute Check Outputs: A list of formatted display strings for the devices and their Mismatched Host Attributes
+```
+   mismatched_host_attribute_check_outputs = list[string] /[{Module: module_name, resources: [resource]}"]
+```
+## Usage: 
+```
+module "network_host_mismatch_attribute_check" {
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_host_mismatch_attribute_check"
+  
+  network = var.network
+  assert = "HostAttributeNMismatched"
+}
+
+output "resources" {
+   value = module.network_host_mismatch_attribute_check.resources
+}
+
+output "mismatched_host_attribute_check_outputs" {
+   value = module.network_host_mismatch_attribute_check.mismatched_host_attribute_check_outputs
+}
+
+output "device_names" {
+  value = module.network_host_mismatch_attribute_check.device_names
+}
+```
+## Usage Reference
+* [Network Setup With Checks Workflow](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/setup_network_with_checks)
 

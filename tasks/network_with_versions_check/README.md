@@ -1,71 +1,17 @@
-# Task: Network Attrbute Check
-This task will check the devices'version intent against the network devices'versions. 
-  1. Go to the **network_with_versions_check** directory or its clone directory
-     1. Assumption: *terraform init* was executed before (only one time) to initialize the terraform setup.
-  2. Specify the input variables by updating the *AAA.auto.tfvars* input file. 
-     1. The network intent
-  3. Execute *terraform apply* to run using the input from *AAA.auto.tfvars* or *terraform -apply -var-file="AAA.tfvars"*. 
+# Network With Versions Check
 
-*main.tf* in **network_with_versions_check** directory
-```
-module  "get_and_filter_checked_resources" {
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_and_filter_checked_resources"
-  //source = "../../utils/get_and_filter_checked_resources"
-
-  network = var.network
-  resource_type = "Device"
-  filter = "Mismatched"
-}
-
-locals {
-  resources = module.get_and_filter_checked_resources.resources
-  device_names = module.get_and_filter_checked_resources.device_names
-  version_mismatched = length(local.device_names) > 0
-  device_version_checks_outputs = local.version_mismatched ? [for k,v in local.resources : "Device:${upper(k)}, Device_Version: ${v[0].devicevalue}, Intent_Version: ${v[0].intentvalue}"] : []
-  upper_device_names = [for k in local.device_names : "${upper(k)}"]
-}
-
-output "message" {
-  value = local.version_mismatched && !var.assert ? "Not Assert. Devices with Mismatched Version:\n${join("\n", local.device_version_checks_outputs)}\n\nAction: Continue to run" : ""
-}
-
-// check module with mismatched version
-data "xrcm_check" "check_device_version_mismatched" {
-  depends_on = [module.get_and_filter_checked_resources] 
-
-  count = var.assert ? 1 : 0
-  condition = local.version_mismatched
-  description = "Devices's version are mismatched: ${join(":::", local.upper_device_names)}"
-  throw = "Devices with Mismatched Software Version:\n${join("\n", local.device_version_checks_outputs)}\n\n Please upgrade the Device if required. If the SW vesrions are compatible, please set 'assert' to false or remove 'Version' from the 'asserts' list; then run again."
-}
-
-output "resources" {
-   value = local.resources
-}
-
-output "device_version_checks_outputs" {
-   value = local.device_version_checks_outputs
-}
-
-output "device_names" {
-  value = local.device_names
-}
-
-```
-## Usage: [Network Setup With Version Check Workflow](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/setup_network_with_checks)
 ## Description
-Below is the run sequence
-### check the intent device resources' attribute against the network device attributes
+This task will check the devices' versions against the devices's intent versions.
 
 ## Inputs
-### Asserts : If assert is true, the run will stop when there is a mismatched host attribute
+1. Asserts : If assert is true, the run will stop when there is a mismatched device version
 ```
 variable assert { 
   type = bool
   default = true 
 }
 ```
-### Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
+2. Network: For each device, specify its Device, Device config, its Client Ports and Line Carriers.
 ```
 variable network {
   type = object({
@@ -90,3 +36,42 @@ network = {
     }
   }
 ```
+## Outputs
+1. Devices Resources: *resources*: The devices'resources which have different version. It is a map of device name to the array of its matched resources.
+```
+   resources = object ({  n= string, resourcetype = string, deviceid = optional(string)
+              resources = list(object({resourceid = string, attributevalues = string, controlattribute = optional(string), parentid= optional(string), 
+              grandparentid = optional(string), attributevalues = optional(list(object({attribute=string, intentvalue= string, devicevalue=optional(string),
+              controlattribute= optional(string),isvaluematch=optional(bool), attributecontrolbyhost = optional(bool)}
+```
+2. Device_Names *device_names*: The list of device names which has attributes met the condition 
+```
+  device_names = list(string)
+```
+3. Deviceid Checks Outputs: A list of formatted display strings for the devices and their Mismatched IDs
+```
+device_version_checks_outputs = list(string) // ["Device:device_name Device_Version: device_version, Intent_Version: intent_version]
+```
+## Usage: 
+```
+module  "network_with_versions_check" {
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_versions_check"
+
+  network = var.network
+  assert = var.assert
+}
+
+output "device_names" {
+  value = module.network_with_IDs_check.device_names
+}
+
+output "resources" {
+  value = module.network_with_versions_check.resources
+}
+
+output "device_version_checks_outputs" {
+  value = module.network_with_versions_check.device_version_checks_outputs
+}
+```
+## Usage Refereences
+* [Network Setup With Version Check Workflow](https://github.com/infinera/terraform-infinera-xr-modules/tree/main/workflows/setup_network_with_checks)

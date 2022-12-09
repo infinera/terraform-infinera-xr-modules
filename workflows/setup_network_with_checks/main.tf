@@ -10,13 +10,15 @@ module "network_with_versions_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_with_versions_check"
   //source = "../../tasks/network_with_versions_check"
 
+  network = var.network
   assert = contains(var.asserts, "Version")
 }
  
 module "network_host_mismatch_attribute_check" {
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network_host_mismatch_attribute_check"
   //source = "../../tasks/network_host_mismatch_attribute_check"
-  
+
+  network = var.network
   assert = contains(var.asserts, "HostAttributeNMismatched")
 }
 
