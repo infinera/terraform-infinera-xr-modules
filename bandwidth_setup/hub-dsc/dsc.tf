@@ -15,8 +15,8 @@ resource "xrcm_dsc" "dsc" {
   dscid     = each.key
   //usability         = var.usability // 
   // constellationdscid = (contains(var.tx_bandwithlist, each.value)) ? each.key : ""
-  txenabled = (contains(var.tx_bandwithlist, each.value)) ? true : false
-  rxenabled = (contains(var.rx_bandwithlist, each.value)) ? true : false
+  //txenabled = (contains(var.tx_bandwithlist, each.value)) ? true : false
+  //rxenabled = (contains(var.rx_bandwithlist, each.value)) ? true : false
 
   //facprbsgenenabled = var.facprbsgenenabled
   //facprbsmonenabled = var.facprbsmonenabled

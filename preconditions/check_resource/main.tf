@@ -14,8 +14,8 @@ provider "xrcm" {
 
 // get and filter all the resources that meet the condition
 module "get_and_filter_checked_resources"  {
-  //source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_and_filter_checked_resources"
-  source = "../../utils/get_and_filter_checked_resources"
+  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//utils/get_and_filter_checked_resources"
+  //source = "../../utils/get_and_filter_checked_resources"
 
   resource_type = var.resource_type
   filter = var.condition

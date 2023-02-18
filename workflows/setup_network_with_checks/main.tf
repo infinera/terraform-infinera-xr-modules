@@ -26,7 +26,7 @@ module "network_host_mismatch_attribute_check" {
 module "network" {
 
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-  //source = "../network"
+  //source = "../../tasks/network"
 
   network = var.network
   leaf_bandwidth = var.leaf_bandwidth
