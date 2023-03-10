@@ -10,7 +10,7 @@ terraform {
 resource "xrcm_cfg" "hub"  {
   configuredrole = var.hub_configuredrole
   trafficmode = var.trafficmode
-  fiberconnectionmode = var.fiberconnectionmode
+  //fiberconnectionmode = var.fiberconnectionmode
   tcmode = var.tcmode
   n =  var.hub_n
 }

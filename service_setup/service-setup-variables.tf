@@ -1,13 +1,13 @@
 variable "client-2-dscg" {
   type = map(map(object({
     clientindex = number
-    dscgid   = string
-    lctype = string
-    capacity = number
-    imc = string
+    dscgaid     = string
+
+    capacity      = number
+    imc           = string
     imc_outer_vid = string
-    emc = string
-    emc_outer_vid = string      
+    emc           = string
+    emc_outer_vid = string
   })))
   description = "Defines the local connections for each node in the network. each conection include the cliend id and dscg id"
 }
@@ -18,5 +18,5 @@ variable "acpres" {
 }
 
 variable "module_clients" {
-  type    = map(list(object({clientid = string, portspeed = optional(string)})))
+  type = map(list(object({ clientaid = string, portspeed = optional(string) })))
 }

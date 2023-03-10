@@ -9,13 +9,13 @@ terraform {
 
 resource "xrcm_ac" "ac" {
 
-  for_each = var.online ? var.aclist : {}
-    n        = var.n
-    ethernetid = var.module_clients[var.n][each.value["clientindex"]]["clientid"]
-    acid     = each.key
-    capacity     = each.value["capacity"]
-    imc      = each.value["imc"]
-    imc_outer_vid = each.value["imc_outer_vid"]
-    emc      = each.value["emc"]
-    emc_outer_vid = each.value["emc_outer_vid"]
+  for_each      = var.online ? var.aclist : {}
+  n             = var.n
+  ethernetid    = var.module_clients[var.n][each.value["clientindex"]]["clientaid"]
+  acid          = each.key
+  capacity      = each.value["capacity"]
+  imc           = each.value["imc"]
+  imc_outer_vid = each.value["imc_outer_vid"]
+  emc           = each.value["emc"]
+  emc_outer_vid = each.value["emc_outer_vid"]
 }

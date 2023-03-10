@@ -2,15 +2,15 @@
 variable "aclist" {
   type = map(object({
     clientindex = number
-    dscgid   = string
-    lctype = string
-    capacity = number
-    imc = string
+    dscgaid     = string
+
+    capacity      = number
+    imc           = string
     imc_outer_vid = string
-    emc = string
+    emc           = string
     emc_outer_vid = string
   }))
-  description = "ClientID to DSCG ID"
+  description = "clientaid to DSCG ID"
 }
 
 variable "n" {
@@ -18,13 +18,13 @@ variable "n" {
 }
 
 variable "trafficmode" {
-  type    = string
+  type = string
 }
 
 variable "online" {
-  type    = bool
+  type = bool
 }
 
 variable "module_clients" {
-  type    = map(list(object({clientid = string, portspeed = optional(string)})))
+  type = map(list(object({ clientaid = string, portspeed = optional(string) })))
 }

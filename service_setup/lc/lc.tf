@@ -13,10 +13,9 @@ resource "xrcm_lc" "lc" {
   n        = var.n
   //lcid     = each.key
   // TODO Port ID and Client ID
-  //clientid  = each.value["clientid"]
-  clientid  = var.trafficmode == "L2Mode" ? each.key : each.value["clientindex"]
-  dscgid    = each.value["dscgid"]
-  lctype    = each.value["lctype"]
+  //clientaid  = each.value["clientaid"]
+  clientaid = var.trafficmode == "L2Mode" ? each.key : each.value["clientindex"]
+  dscgaid   = each.value["dscgaid"]
   lineptpid = var.lineptpid
   carrierid = var.carrierid
 

@@ -18,7 +18,7 @@ module "network" {
   depends_on = [module.network_with_IDs_check]
 
   source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//tasks/network"
-  //source = "source = "../../tasks/network"
+  //source = "../../tasks/network"
 
   network = var.network
   leaf_bandwidth = var.leaf_bandwidth

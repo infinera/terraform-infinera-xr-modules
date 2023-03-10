@@ -47,8 +47,8 @@ module "bandwidth-setup" {
 
 module "service-setup" {
   depends_on        = [module.bandwidth-setup]
-  source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//service_setup"
-  //source = "../../service_setup"
+  //source = "git::https://github.com/infinera/terraform-infinera-xr-modules.git//service_setup"
+  source = "../../service_setup"
   hub_names = local.hub_names
   leaf_names = local.leaf_names
   client-2-dscg     = var.client-2-dscg

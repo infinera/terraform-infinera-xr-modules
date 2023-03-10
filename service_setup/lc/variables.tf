@@ -1,8 +1,4 @@
 
-variable "lctype" {
-  type    = string
-  default = "biDir" //uniDirUs, uniDirDs
-}
 
 variable "acpres" {
   type    = string
@@ -12,15 +8,15 @@ variable "acpres" {
 variable "lclist" {
   type = map(object({
     clientindex = number
-    dscgid        = string
-    lctype        = string
-    capacity          = number
+    dscgaid     = string
+
+    capacity      = number
     imc           = string
     imc_outer_vid = string
     emc           = string
     emc_outer_vid = string
   }))
-  description = "ClientID to DSCG ID"
+  description = "clientaid to DSCG ID"
 }
 
 variable "n" {
