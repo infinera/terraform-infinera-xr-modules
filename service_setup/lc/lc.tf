@@ -17,6 +17,4 @@ resource "xrcm_lc" "lc" {
   clientaid = var.trafficmode == "L2Mode" ? each.key : each.value["clientindex"]
   dscgaid   = each.value["dscgaid"]
   lineptpid = var.lineptpid
-  carrierid = var.carrierid
-
 }
